@@ -24,6 +24,7 @@
         "harmony/core-bundle": "1.0.x-dev",
         "kevintweber/ktw-database-menu-bundle": "dev-custom_table_name",
         "liip/theme-bundle": "^1.4",
+        "symfony-cmf/create-bundle": "2.0.x-dev",
         "symfony/console": "^3.3"
     },
     "autoload": {
