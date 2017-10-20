@@ -50,14 +50,4 @@ class HarmonyThemeExtension extends Extension implements PrependExtensionInterfa
         // prepend the `liip_theme` settings
         $container->prependExtensionConfig('liip_theme', $configArray['liip_theme']);
     }
-
-    /**
-     * Return HarmonyCMS alias name.
-     *
-     * @return string
-     */
-    public function getAlias(): string
-    {
-        return HarmonyCoreExtension::ALIAS;
-    }
 }
