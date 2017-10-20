@@ -12,10 +12,17 @@
             "role": "Developer"
         }
     ],
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/bwantoo/KtwDatabaseMenuBundle.git"
+        }
+    ],
     "require": {
         "php": ">=7.0",
         "composer/composer": "^1.5",
         "harmony/core-bundle": "1.0.x-dev",
+        "kevintweber/ktw-database-menu-bundle": "dev-custom_table_name",
         "liip/theme-bundle": "^1.4",
         "symfony/console": "^3.3"
     },
