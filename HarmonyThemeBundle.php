@@ -2,9 +2,7 @@
 
 namespace Harmony\Bundle\ThemeBundle;
 
-use Harmony\Bundle\ThemeBundle\DependencyInjection\HarmonyThemeExtension;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
-use Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
 
 /**
  * Class HarmonyThemeBundle
