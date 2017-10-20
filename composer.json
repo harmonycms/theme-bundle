@@ -1,0 +1,35 @@
+{
+    "name": "harmony/theme-bundle",
+    "description": "HarmonyCMS theme bundle",
+    "homepage": "https://projectharmony.github.io",
+    "type": "symfony-bundle",
+    "license": "LGPL-3.0",
+    "authors": [
+        {
+            "name": "David Sanchez",
+            "email": "david38sanchez@gmail.com",
+            "homepage": "http://davidsanchez.me",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": ">=7.0",
+        "composer/composer": "^1.5",
+        "harmony/core-bundle": "1.0.x-dev",
+        "liip/theme-bundle": "^1.4",
+        "symfony/console": "^3.3"
+    },
+    "autoload": {
+        "psr-4": {
+            "Harmony\\Bundle\\ThemeBundle\\": ""
+        }
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.0-dev"
+        }
+    }
+}
