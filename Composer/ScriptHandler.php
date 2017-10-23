@@ -4,6 +4,7 @@ namespace Harmony\Bundle\ThemeBundle\Composer;
 
 use Composer\Script\Event;
 use Harmony\Bundle\CoreBundle\Composer\AbstractScriptHandler;
+use Sensio\Bundle\DistributionBundle\Composer\ScriptHandler as DistributionBundleScriptHandler;
 
 /**
  * Class ScriptHandler
@@ -12,6 +13,19 @@ use Harmony\Bundle\CoreBundle\Composer\AbstractScriptHandler;
  */
 class ScriptHandler extends AbstractScriptHandler
 {
+
+    /**
+     * Occurs after the install command has been executed with a lock file present.
+     * Occurs before the update command is executed, or before the install command is executed without a lock file
+     * present.
+     *
+     * @param Event $event
+     */
+    public static function handleCommandScripts(Event $event)
+    {
+        DistributionBundleScriptHandler::installAssets($event);
+        self::installAssets($event);
+    }
 
     /**
      * Installs the themes assets under the web root directory.
