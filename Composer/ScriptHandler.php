@@ -4,7 +4,6 @@ namespace Harmony\Bundle\ThemeBundle\Composer;
 
 use Composer\Script\Event;
 use Harmony\Bundle\CoreBundle\Composer\AbstractScriptHandler;
-use Sensio\Bundle\DistributionBundle\Composer\ScriptHandler as DistributionBundleScriptHandler;
 
 /**
  * Class ScriptHandler
@@ -23,7 +22,6 @@ class ScriptHandler extends AbstractScriptHandler
      */
     public static function handleCommandScripts(Event $event)
     {
-        DistributionBundleScriptHandler::installAssets($event);
         self::installAssets($event);
     }
 
