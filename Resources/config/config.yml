@@ -1,6 +1,5 @@
 # Liip theme configuration
 liip_theme:
-  assetic_integration: true
   path_patterns:
     app_resource:
       - '%%app_path%%/../../themes/%%current_theme%%/%%template%%'
