@@ -15,10 +15,10 @@ use Symfony\Component\Asset\Packages;
 class AssetsExtension extends BridgeAssetExtension
 {
 
-    /** @var ActiveTheme */
+    /** @var ActiveTheme $activeTheme */
     protected $activeTheme;
 
-    /** @var string */
+    /** @var string $projectDir */
     protected $projectDir;
 
     /**

@@ -1,47 +1,46 @@
 {
-    "name": "harmony/theme-bundle",
-    "description": "HarmonyCMS theme bundle",
-    "homepage": "https://projectharmony.github.io",
-    "type": "symfony-bundle",
-    "license": "LGPL-3.0",
-    "authors": [
-        {
-            "name": "David Sanchez",
-            "email": "david38sanchez@gmail.com",
-            "homepage": "http://davidsanchez.me",
-            "role": "Developer"
-        }
-    ],
-    "repositories": [
-        {
-            "type": "vcs",
-            "url": "https://github.com/bwantoo/KtwDatabaseMenuBundle.git"
-        }
-    ],
-    "require": {
-        "php": ">=7.0",
-        "composer/composer": "^1.5",
-        "harmony/core-bundle": "1.0.x-dev",
-        "kevintweber/ktw-database-menu-bundle": "dev-custom_table_name",
-        "liip/theme-bundle": "^1.4",
-        "symfony/console": "^3.3"
-    },
-    "autoload": {
-        "psr-4": {
-            "Harmony\\Bundle\\ThemeBundle\\": ""
-        }
-    },
-    "config": {
-        "sort-packages": true
-    },
-    "extra": {
-        "branch-alias": {
-            "dev-master": "1.0-dev"
-        }
-    },
-    "scripts": {
-        "auto-scripts": {
-            "security-checker security:check": "script"
-        }
+  "name": "harmony/theme-bundle",
+  "description": "HarmonyCMS theme bundle",
+  "homepage": "https://projectharmony.github.io",
+  "type": "symfony-bundle",
+  "license": "LGPL-3.0-or-later",
+  "authors": [
+    {
+      "name": "David Sanchez",
+      "email": "david38sanchez@gmail.com",
+      "homepage": "http://davidsanchez.me",
+      "role": "Developer"
     }
+  ],
+  "repositories": [
+    {
+      "type": "vcs",
+      "url": "https://github.com/bwantoo/KtwDatabaseMenuBundle.git"
+    }
+  ],
+  "require": {
+    "php": "^7.1.3",
+    "composer/composer": "^1.6",
+    "harmony/core-bundle": "1.0.x-dev",
+    "liip/theme-bundle": "^1.5",
+    "symfony/console": "^4.1"
+  },
+  "autoload": {
+    "psr-4": {
+      "Harmony\\Bundle\\ThemeBundle\\": ""
+    }
+  },
+  "config": {
+    "sort-packages": true
+  },
+  "extra": {
+    "branch-alias": {
+      "dev-master": "1.0-dev"
+    }
+  },
+  "scripts": {
+    "auto-scripts": {
+      "security-checker security:check": "script"
+    }
+  }
 }

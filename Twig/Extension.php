@@ -20,10 +20,10 @@ use Twig_Extension_GlobalsInterface;
 class Extension extends AbstractExtension implements Twig_Extension_GlobalsInterface
 {
 
-    /** @var Packages */
+    /** @var Packages $packages */
     protected $packages;
 
-    /** @var ActiveTheme */
+    /** @var ActiveTheme $activeTheme */
     protected $activeTheme;
 
     /** @var ContainerInterface */

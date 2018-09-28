@@ -13,7 +13,7 @@ use Symfony\Component\Finder\Finder;
 class ThemeLocator
 {
 
-    /** @var string */
+    /** @var string $projectDir */
     protected $projectDir;
 
     /**
