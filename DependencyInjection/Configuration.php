@@ -2,16 +2,15 @@
 
 namespace Harmony\Bundle\ThemeBundle\DependencyInjection;
 
-use Harmony\Bundle\CoreBundle\DependencyInjection\HarmonyCoreExtension;
+use Harmony\Bundle\CoreBundle\DependencyInjection\Configuration as BaseConfiguration;
 use Harmony\Bundle\CoreBundle\Component\Config\Definition\Builder\TreeBuilder;
-use Symfony\Component\Config\Definition\ConfigurationInterface;
 
 /**
  * Class Configuration
  *
  * @package Harmony\Bundle\ThemeBundle\DependencyInjection
  */
-class Configuration implements ConfigurationInterface
+class Configuration extends BaseConfiguration
 {
 
     /**
@@ -21,8 +20,8 @@ class Configuration implements ConfigurationInterface
      */
     public function getConfigTreeBuilder(): TreeBuilder
     {
-        $treeBuilder = new TreeBuilder();
-        $rootNode    = $treeBuilder->setRoot(HarmonyCoreExtension::ALIAS);
+        $treeBuilder = parent::getConfigTreeBuilder();
+        $rootNode    = $treeBuilder->getRoot();
 
         $rootNode
             ->children()

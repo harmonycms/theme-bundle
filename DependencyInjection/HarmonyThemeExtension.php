@@ -2,6 +2,7 @@
 
 namespace Harmony\Bundle\ThemeBundle\DependencyInjection;
 
+use Harmony\Bundle\CoreBundle\DependencyInjection\HarmonyCoreExtension;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\Extension;
@@ -17,9 +18,6 @@ use Symfony\Component\Yaml\Yaml;
 class HarmonyThemeExtension extends Extension implements PrependExtensionInterface
 {
 
-    /** Constant */
-    const CONFIG_FILE = 'config.yml';
-
     /**
      * Loads a specific configuration.
      *
@@ -32,7 +30,7 @@ class HarmonyThemeExtension extends Extension implements PrependExtensionInterfa
     public function load(array $configs, ContainerBuilder $container)
     {
         $loader = new loader\YamlFileLoader($container, new FileLocator(dirname(__DIR__) . '/Resources/config'));
-        $loader->load('services.yml');
+        $loader->load('services.yaml');
     }
 
     /**
@@ -43,9 +41,19 @@ class HarmonyThemeExtension extends Extension implements PrependExtensionInterfa
     public function prepend(ContainerBuilder $container)
     {
         // generate a config array with the content of `config.yml` file
-        $configArray = Yaml::parse(file_get_contents(dirname(__DIR__) . '/Resources/config/' . self::CONFIG_FILE));
+        $configArray = Yaml::parse(file_get_contents(dirname(__DIR__) . '/Resources/config/config.yaml'));
 
         // prepend the `liip_theme` settings
         $container->prependExtensionConfig('liip_theme', $configArray['liip_theme']);
+    }
+
+    /**
+     * Return HarmonyCMS alias name.
+     *
+     * @return string
+     */
+    public function getAlias(): string
+    {
+        return HarmonyCoreExtension::ALIAS;
     }
 }
