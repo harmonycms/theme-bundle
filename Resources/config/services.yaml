@@ -1,33 +1,31 @@
-# Learn more about services, parameters and containers at
-# http://symfony.com/doc/current/book/service_container.html
 services:
-  harmony.theme.twig.extension:
-    class: Harmony\Bundle\ThemeBundle\Twig\Extension
-    arguments: ['@assets.packages', '@liip_theme.active_theme', '@service_container']
-    public: false
-    tags:
-      - { name: twig.extension }
+  harmony.theme.theme_locator:
+    class: Harmony\Bundle\ThemeBundle\Locator\ThemeLocator
+    arguments: ['%kernel.project_dir%']
 
   harmony.theme.theme_resolver:
     class: Harmony\Bundle\ThemeBundle\Services\ThemeResolver
     arguments: ['@service_container']
 
-  liip_theme.theme_locator:
-    class: Harmony\Bundle\ThemeBundle\Locator\ThemeLocator
-    arguments: ['%kernel.project_dir%']
-
-  liip_theme.active_theme:
+  harmony.theme.active_theme:
     class: Harmony\Bundle\ThemeBundle\ActiveTheme
     arguments:
-      - '%liip_theme.active_theme%'
-      - '%liip_theme.themes%'
-      - '@liip_theme.theme_auto_detect'
-      - '@liip_theme.theme_locator'
-      - '@harmony.theme.theme_resolver'
+    - '%liip_theme.active_theme%'
+    - '%liip_theme.themes%'
+    - '@liip_theme.theme_auto_detect'
+    - '@harmony.theme.theme_locator'
+    - '@harmony.theme.theme_resolver'
+
+  harmony.theme.twig.extension:
+    class: Harmony\Bundle\ThemeBundle\Twig\Extension
+    arguments: ['@assets.packages', '@harmony.theme.active_theme', '@service_container']
+    public: false
+    tags:
+      - { name: twig.extension }
 
   twig.extension.assets:
     class:     Harmony\Bundle\ThemeBundle\Twig\AssetsExtension
-    arguments: ['@assets.packages', '@liip_theme.active_theme', '%kernel.project_dir%']
+    arguments: ['@assets.packages', '@harmony.theme.active_theme', '%kernel.project_dir%']
     public: false
     tags:
         - { name: twig.extension }
