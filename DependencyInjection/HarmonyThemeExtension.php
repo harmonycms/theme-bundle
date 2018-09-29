@@ -31,8 +31,7 @@ class HarmonyThemeExtension extends Extension implements PrependExtensionInterfa
      */
     public function load(array $configs, ContainerBuilder $container)
     {
-        $loader = new loader\YamlFileLoader($container,
-            new FileLocator(dirname(__DIR__) . DIRECTORY_SEPARATOR . 'Resources/config'));
+        $loader = new loader\YamlFileLoader($container, new FileLocator(dirname(__DIR__) . '/Resources/config'));
         $loader->load('services.yml');
     }
 
@@ -44,8 +43,7 @@ class HarmonyThemeExtension extends Extension implements PrependExtensionInterfa
     public function prepend(ContainerBuilder $container)
     {
         // generate a config array with the content of `config.yml` file
-        $configArray = Yaml::parse(file_get_contents(dirname(__DIR__) . DIRECTORY_SEPARATOR . 'Resources' .
-            DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . self::CONFIG_FILE));
+        $configArray = Yaml::parse(file_get_contents(dirname(__DIR__) . '/Resources/config/' . self::CONFIG_FILE));
 
         // prepend the `liip_theme` settings
         $container->prependExtensionConfig('liip_theme', $configArray['liip_theme']);
