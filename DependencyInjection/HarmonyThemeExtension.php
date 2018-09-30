@@ -29,6 +29,11 @@ class HarmonyThemeExtension extends Extension implements PrependExtensionInterfa
      */
     public function load(array $configs, ContainerBuilder $container)
     {
+        $config = $this->processConfiguration(new Configuration(), $configs);
+        foreach ($config as $key => $value) {
+            $container->setParameter(HarmonyCoreExtension::ALIAS . '.' . $key, $value);
+        }
+
         $loader = new loader\YamlFileLoader($container, new FileLocator(dirname(__DIR__) . '/Resources/config'));
         $loader->load('services.yaml');
     }
