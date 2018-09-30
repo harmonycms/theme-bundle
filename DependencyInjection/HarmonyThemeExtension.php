@@ -29,11 +29,6 @@ class HarmonyThemeExtension extends Extension implements PrependExtensionInterfa
      */
     public function load(array $configs, ContainerBuilder $container)
     {
-        $config = $this->processConfiguration(new Configuration(), $configs);
-        foreach ($config as $key => $value) {
-            $container->setParameter(HarmonyCoreExtension::ALIAS . '.' . $key, $value);
-        }
-
         $loader = new loader\YamlFileLoader($container, new FileLocator(dirname(__DIR__) . '/Resources/config'));
         $loader->load('services.yaml');
     }
@@ -50,15 +45,13 @@ class HarmonyThemeExtension extends Extension implements PrependExtensionInterfa
 
         // prepend the `liip_theme` settings
         $container->prependExtensionConfig('liip_theme', $configArray['liip_theme']);
-    }
 
-    /**
-     * Return HarmonyCMS alias name.
-     *
-     * @return string
-     */
-    public function getAlias(): string
-    {
-        return HarmonyCoreExtension::ALIAS;
+        // process the configuration
+        $configs = $container->getExtensionConfig(HarmonyCoreExtension::ALIAS);
+        // use the Configuration class to generate a config array
+        $config = $this->processConfiguration(new Configuration(), $configs);
+        foreach ($config as $key => $value) {
+            $container->setParameter(HarmonyCoreExtension::ALIAS . '.' . $key, $value);
+        }
     }
 }

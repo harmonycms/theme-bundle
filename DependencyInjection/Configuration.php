@@ -33,6 +33,7 @@ class Configuration implements ConfigurationInterface
                     ->info('The theme used to render the frontend pages.')
                 ->end()
             ->end()
+            ->ignoreExtraKeys(true)
         ;
 
         return $treeBuilder;
