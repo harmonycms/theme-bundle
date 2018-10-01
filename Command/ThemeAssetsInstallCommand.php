@@ -2,10 +2,11 @@
 
 namespace Harmony\Bundle\ThemeBundle\Command;
 
+use Harmony\Bundle\ThemeBundle\ActiveTheme;
 use InvalidArgumentException;
 use Symfony\Bundle\FrameworkBundle\Command\AssetsInstallCommand;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Exception\LogicException;
-use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -20,15 +21,38 @@ use Symfony\Component\Finder\Finder;
  *
  * @package Harmony\Bundle\ThemeBundle\Command
  */
-class ThemeAssetsInstallCommand extends ContainerAwareCommand
+class ThemeAssetsInstallCommand extends Command
 {
 
     /** Constants */
     const THEMES_DIR = 'themes';
     const ASSETS_DIR = 'assets';
 
-    /** @var Filesystem */
+    /** @var Filesystem $filesystem */
     protected $filesystem;
+
+    /** @var ActiveTheme $activeTheme */
+    protected $activeTheme;
+
+    /** @var string $projectDir */
+    protected $projectDir;
+
+    /**
+     * ThemeAssetsInstallCommand constructor.
+     *
+     * @param string|null $name
+     * @param Filesystem  $filesystem
+     * @param ActiveTheme $activeTheme
+     * @param string      $projectDir
+     */
+    public function __construct(string $name = null, Filesystem $filesystem, ActiveTheme $activeTheme,
+                                string $projectDir)
+    {
+        parent::__construct($name);
+        $this->activeTheme = $activeTheme;
+        $this->filesystem  = $filesystem;
+        $this->projectDir  = $projectDir;
+    }
 
     /**
      * Configures the current command.
@@ -37,7 +61,7 @@ class ThemeAssetsInstallCommand extends ContainerAwareCommand
     {
         $this->setName('theme:assets:install')
             ->setDefinition([
-                new InputArgument('target', InputArgument::OPTIONAL, 'The target directory', 'web'),
+                new InputArgument('target', InputArgument::OPTIONAL, 'The target directory', 'public'),
             ])
             ->addOption('symlink', null, InputOption::VALUE_NONE, 'Symlinks the assets instead of copying it')
             ->addOption('relative', null, InputOption::VALUE_NONE, 'Make relative symlinks')
@@ -86,8 +110,6 @@ EOT
                 $input->getArgument('target')));
         }
 
-        $this->filesystem = $this->getContainer()->get('filesystem');
-
         // Create the themes directory otherwise symlink will fail.
         $themesDir = $targetArg . DIRECTORY_SEPARATOR . self::THEMES_DIR . DIRECTORY_SEPARATOR;
         $this->filesystem->mkdir($themesDir, 0777);
@@ -111,10 +133,8 @@ EOT
         $exitCode       = 0;
         $validAssetDirs = [];
 
-        $activeTheme = $this->getContainer()->get('liip_theme.active_theme');
-        foreach ($activeTheme->getThemes() as $theme) {
-            $rootDir   = $this->getContainer()->get('kernel')->getRootDir();
-            $originDir = dirname($rootDir) . DIRECTORY_SEPARATOR . self::THEMES_DIR . DIRECTORY_SEPARATOR . $theme .
+        foreach ($this->activeTheme->getThemes() as $theme) {
+            $originDir = $this->projectDir . DIRECTORY_SEPARATOR . self::THEMES_DIR . DIRECTORY_SEPARATOR . $theme .
                 DIRECTORY_SEPARATOR . self::ASSETS_DIR;
             if (!is_dir($originDir)) {
                 continue;
@@ -148,12 +168,14 @@ EOT
                     $rows[] = [
                         sprintf('<fg=green;options=bold>%s</>',
                             '\\' === DIRECTORY_SEPARATOR ? 'OK' : "\xE2\x9C\x94" /* HEAVY CHECK MARK (U+2714) */),
-                        $message, $method
+                        $message,
+                        $method
                     ];
                 } else {
                     $rows[] = [
                         sprintf('<fg=yellow;options=bold>%s</>', '\\' === DIRECTORY_SEPARATOR ? 'WARNING' : '!'),
-                        $message, $method
+                        $message,
+                        $method
                     ];
                 }
             }
@@ -162,7 +184,8 @@ EOT
                 $rows[]   = [
                     sprintf('<fg=red;options=bold>%s</>',
                         '\\' === DIRECTORY_SEPARATOR ? 'ERROR' : "\xE2\x9C\x98" /* HEAVY BALLOT X (U+2718) */),
-                    $message, $e->getMessage()
+                    $message,
+                    $e->getMessage()
                 ];
             }
         }
