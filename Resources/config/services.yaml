@@ -7,7 +7,7 @@ services:
     class: Harmony\Bundle\ThemeBundle\Services\ThemeResolver
     arguments: ['@service_container']
 
-  harmony.theme.active_theme:
+  liip_theme.active_theme:
     class: Harmony\Bundle\ThemeBundle\ActiveTheme
     arguments:
     - '%liip_theme.active_theme%'
@@ -18,14 +18,14 @@ services:
 
   harmony.theme.twig.extension:
     class: Harmony\Bundle\ThemeBundle\Twig\Extension
-    arguments: ['@assets.packages', '@harmony.theme.active_theme', '@service_container']
+    arguments: ['@assets.packages', '@liip_theme.active_theme', '@service_container']
     public: false
     tags:
       - { name: twig.extension }
 
   twig.extension.assets:
     class:     Harmony\Bundle\ThemeBundle\Twig\AssetsExtension
-    arguments: ['@assets.packages', '@harmony.theme.active_theme', '%kernel.project_dir%']
+    arguments: ['@assets.packages', '@liip_theme.active_theme', '%kernel.project_dir%']
     public: false
     tags:
         - { name: twig.extension }
