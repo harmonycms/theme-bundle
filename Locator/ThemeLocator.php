@@ -36,7 +36,7 @@ class ThemeLocator
         $themeList = $this->projectDir . DIRECTORY_SEPARATOR . HarmonyThemeBundle::THEMES_DIR . DIRECTORY_SEPARATOR;
         /** @var \FilesystemIterator $file */
         foreach ($finder->directories()->in($themeList)->depth('== 0') as $file) {
-            array_push($themes, $file->getFilename());
+            $themes[$file->getPathname()] = $file->getFilename();
         }
 
         return $themes;
