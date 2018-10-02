@@ -10,11 +10,10 @@ services:
   liip_theme.active_theme:
     class: Harmony\Bundle\ThemeBundle\ActiveTheme
     arguments:
-    - '%liip_theme.active_theme%'
-    - '%liip_theme.themes%'
-    - '@liip_theme.theme_auto_detect'
-    - '@harmony.theme.theme_locator'
-    - '@harmony.theme.theme_resolver'
+      - "@=service('harmony.theme.theme_resolver').getActiveTheme()"
+      - '%liip_theme.themes%'
+      - '@liip_theme.theme_auto_detect'
+      - '@harmony.theme.theme_locator'
 
   harmony.theme.twig.extension:
     class: Harmony\Bundle\ThemeBundle\Twig\Extension
@@ -33,4 +32,4 @@ services:
   Harmony\Bundle\ThemeBundle\Command\ThemeAssetsInstallCommand:
     arguments: ['@!', '@filesystem', '@liip_theme.active_theme', '%kernel.project_dir%']
     tags:
-    - { name: console.command }
+      - { name: console.command }

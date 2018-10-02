@@ -3,7 +3,6 @@
 namespace Harmony\Bundle\ThemeBundle;
 
 use Harmony\Bundle\ThemeBundle\Locator\ThemeLocator;
-use Harmony\Bundle\ThemeBundle\Services\ThemeResolver;
 use Liip\ThemeBundle\ActiveTheme as LiipActiveTheme;
 use Liip\ThemeBundle\Helper\DeviceDetectionInterface;
 
@@ -15,21 +14,35 @@ use Liip\ThemeBundle\Helper\DeviceDetectionInterface;
 class ActiveTheme extends LiipActiveTheme
 {
 
+    /** @var array $themeData */
+    protected $themeData = [];
+
     /**
      * ActiveTheme constructor.
      *
-     * @param null|string                   $name
+     * @param string                        $name
      * @param array                         $themes
      * @param DeviceDetectionInterface|null $deviceDetection
      * @param ThemeLocator                  $themeLocator
-     * @param ThemeResolver                 $themeResolver
+     *
+     * @throws Json\JsonValidationException
+     * @throws \Seld\JsonLint\ParsingException
      */
-    public function __construct(?string $name, array $themes = [], DeviceDetectionInterface $deviceDetection = null,
-                                ThemeLocator $themeLocator, ThemeResolver $themeResolver)
+    public function __construct(string $name, array $themes, DeviceDetectionInterface $deviceDetection,
+                                ThemeLocator $themeLocator)
     {
-        $themes = $themeLocator->discoverThemes();
-        $name   = $themeResolver->getActiveTheme();
-
+        $themes          = $themeLocator->discoverThemes();
+        $this->themeData = $themeLocator->getThemeData();
         parent::__construct($name, $themes, $deviceDetection);
+    }
+
+    /**
+     * Get themeData
+     *
+     * @return array
+     */
+    public function getThemeData(): array
+    {
+        return $this->themeData;
     }
 }

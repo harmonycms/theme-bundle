@@ -1,0 +1,32 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "name": "Theme",
+  "type": "object",
+  "additionalProperties": true,
+  "required": [
+    "name",
+    "description",
+    "type",
+    "version",
+    "extra"
+  ],
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Theme name, including 'vendor-name/' prefix."
+    },
+    "description": {
+      "type": "string",
+      "description": "Short theme description."
+    },
+    "type": {
+      "description": "Type, must be 'harmony-theme'",
+      "type": "string",
+      "const": "harmony-theme"
+    },
+    "version": {
+      "type": "string",
+      "description": "Theme version, see https://getcomposer.org/doc/04-schema.md#version for more info on valid schemes."
+    }
+  }
+}
