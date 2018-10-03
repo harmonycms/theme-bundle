@@ -30,6 +30,6 @@ services:
       - { name: twig.extension }
 
   Harmony\Bundle\ThemeBundle\Command\ThemeAssetsInstallCommand:
-    arguments: ['@!', '@filesystem', '@liip_theme.active_theme', '%kernel.project_dir%']
+    arguments: ['@?', '@filesystem', '@liip_theme.active_theme', '%kernel.project_dir%']
     tags:
       - { name: console.command }
