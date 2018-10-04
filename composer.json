@@ -17,7 +17,7 @@
     "ext-json": "*",
     "composer/composer": "^1.6",
     "harmony/core-bundle": "^1.0-dev",
-    "liip/theme-bundle": "dev-master",
+    "liip/theme-bundle": "^1.6",
     "symfony/console": "^4.1"
   },
   "autoload": {
