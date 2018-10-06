@@ -1,7 +1,7 @@
 {
   "name": "harmony/theme-bundle",
   "description": "HarmonyCMS theme bundle",
-  "homepage": "https://projectharmony.github.io",
+  "homepage": "https://harmonycms.net",
   "type": "symfony-bundle",
   "license": "LGPL-3.0-or-later",
   "authors": [
@@ -15,10 +15,8 @@
   "require": {
     "php": "^7.1.3",
     "ext-json": "*",
-    "composer/composer": "^1.6",
-    "harmony/core-bundle": "^1.0-dev",
-    "liip/theme-bundle": "^1.6",
-    "symfony/console": "^4.1"
+    "composer/composer": "^1.7",
+    "liip/theme-bundle": "^1.6"
   },
   "autoload": {
     "psr-4": {
@@ -31,11 +29,6 @@
   "extra": {
     "branch-alias": {
       "dev-master": "1.0-dev"
-    }
-  },
-  "scripts": {
-    "auto-scripts": {
-      "security-checker security:check": "script"
     }
   }
 }
