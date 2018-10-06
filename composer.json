@@ -29,6 +29,10 @@
   "extra": {
     "branch-alias": {
       "dev-master": "1.0-dev"
+    },
+    "symfony": {
+      "allow-contrib": false,
+      "id": "01CS3YSMW0TMV49TV0M4WVQHW3"
     }
   }
 }
