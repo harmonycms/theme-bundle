@@ -20,7 +20,7 @@ class ActiveTheme extends LiipActiveTheme
     /**
      * ActiveTheme constructor.
      *
-     * @param string                        $name
+     * @param null|string                   $name
      * @param array                         $themes
      * @param DeviceDetectionInterface|null $deviceDetection
      * @param ThemeLocator                  $themeLocator
@@ -28,7 +28,7 @@ class ActiveTheme extends LiipActiveTheme
      * @throws Json\JsonValidationException
      * @throws \Seld\JsonLint\ParsingException
      */
-    public function __construct(string $name, array $themes, DeviceDetectionInterface $deviceDetection,
+    public function __construct(?string $name, array $themes, DeviceDetectionInterface $deviceDetection,
                                 ThemeLocator $themeLocator)
     {
         $themes          = $themeLocator->discoverThemes();

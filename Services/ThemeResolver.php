@@ -29,9 +29,9 @@ class ThemeResolver
     /**
      * Get current active theme from parameter: `harmony.theme`.
      *
-     * @return string
+     * @return null|string
      */
-    public function getActiveTheme(): string
+    public function getActiveTheme(): ?string
     {
         return $this->container->getParameter(HarmonyCoreExtension::ALIAS . '.theme');
     }
