@@ -72,7 +72,7 @@ class Extension extends AbstractExtension implements Twig_Extension_GlobalsInter
     {
         return [
             'harmony' => [
-                'site_name' => $this->container->getParameter(HarmonyCoreExtension::ALIAS)['site_name']
+                'site_name' => $this->container->getParameter(HarmonyCoreExtension::ALIAS . '.settings')['site_name']
             ]
         ];
     }
