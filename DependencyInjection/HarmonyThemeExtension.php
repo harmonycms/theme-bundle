@@ -3,6 +3,7 @@
 namespace Harmony\Bundle\ThemeBundle\DependencyInjection;
 
 use Harmony\Bundle\CoreBundle\DependencyInjection\HarmonyCoreExtension;
+use Harmony\Bundle\ThemeBundle\Locator\ThemeLocator;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\Extension;
@@ -37,6 +38,8 @@ class HarmonyThemeExtension extends Extension implements PrependExtensionInterfa
      * Allow an extension to prepend the extension configurations.
      *
      * @param ContainerBuilder $container
+     *
+     * @throws \Harmony\Bundle\ThemeBundle\Json\JsonValidationException
      */
     public function prepend(ContainerBuilder $container)
     {
@@ -46,10 +49,13 @@ class HarmonyThemeExtension extends Extension implements PrependExtensionInterfa
         // prepend the `liip_theme` settings
         $container->prependExtensionConfig('liip_theme', $configArray['liip_theme']);
 
+        // TODO: inject service instead
+        $themeLocator = new ThemeLocator($container->getParameter('kernel.project_dir'));
+
         // process the configuration
         $configs = $container->getExtensionConfig(HarmonyCoreExtension::ALIAS);
         // use the Configuration class to generate a config array
-        $config = $this->processConfiguration(new Configuration(), $configs);
+        $config = $this->processConfiguration(new Configuration($themeLocator->discoverThemes()), $configs);
         foreach ($config as $key => $value) {
             $container->setParameter(HarmonyCoreExtension::ALIAS . '.' . $key, $value);
         }
