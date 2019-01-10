@@ -33,6 +33,6 @@ class ThemeResolver
      */
     public function getActiveTheme(): ?string
     {
-        return $this->container->getParameter(HarmonyCoreExtension::ALIAS . '.theme');
+        return $this->container->getParameter(HarmonyCoreExtension::ALIAS . '.settings')['theme']['value'];
     }
 }
