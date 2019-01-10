@@ -14,6 +14,19 @@ use Symfony\Component\Config\Definition\ConfigurationInterface;
 class Configuration implements ConfigurationInterface
 {
 
+    /** @var array $themes */
+    protected $themes;
+
+    /**
+     * Configuration constructor.
+     *
+     * @param array $themes
+     */
+    public function __construct(array $themes)
+    {
+        $this->themes = $themes;
+    }
+
     /**
      * Generates the configuration tree builder.
      *
@@ -21,15 +34,30 @@ class Configuration implements ConfigurationInterface
      */
     public function getConfigTreeBuilder(): TreeBuilder
     {
-        $treeBuilder = new TreeBuilder();
-        $rootNode    = $treeBuilder->root(HarmonyCoreExtension::ALIAS, 'array');
+        $treeBuilder = new TreeBuilder(HarmonyCoreExtension::ALIAS);
+        $rootNode    = $treeBuilder->getRoot();
 
         $rootNode
             ->children()
-                ->scalarNode('theme')
-                    ->isRequired()
-                    ->defaultNull()
-                    ->info('The theme used to render the frontend pages.')
+                ->arrayNode('settings')
+                    ->children()
+                        ->arrayNode('theme')
+                            ->beforeNormalization()
+                                ->ifString()
+                                ->then(function($value) { return ['value' => $value]; })
+                            ->end()
+                            ->children()
+                                ->scalarNode('value')
+                                    ->defaultNull()
+                                    ->validate()
+                                        ->ifNotInArray($this->themes)
+                                        ->thenInvalid('Invalid theme %s. Valid themes are: '.implode(', ', array_map(function($s) { return '"'.$s.'"'; }, $this->themes)).'.')
+                                    ->end()
+                                ->end()
+                            ->end()
+                        ->end()
+                    ->end()
+                    ->ignoreExtraKeys(true)
                 ->end()
             ->end()
             ->ignoreExtraKeys(true)
