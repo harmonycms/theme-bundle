@@ -2,7 +2,6 @@
 
 namespace Harmony\Bundle\ThemeBundle\DependencyInjection;
 
-use Harmony\Bundle\CoreBundle\DependencyInjection\HarmonyCoreExtension;
 use Harmony\Bundle\ThemeBundle\Locator\ThemeLocator;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -30,7 +29,7 @@ class HarmonyThemeExtension extends Extension implements PrependExtensionInterfa
      */
     public function load(array $configs, ContainerBuilder $container)
     {
-        $loader = new loader\YamlFileLoader($container, new FileLocator(dirname(__DIR__) . '/Resources/config'));
+        $loader = new Loader\YamlFileLoader($container, new FileLocator(dirname(__DIR__) . '/Resources/config'));
         $loader->load('services.yaml');
     }
 
@@ -40,24 +39,29 @@ class HarmonyThemeExtension extends Extension implements PrependExtensionInterfa
      * @param ContainerBuilder $container
      *
      * @throws \Harmony\Bundle\ThemeBundle\Json\JsonValidationException
+     * @throws \Exception
      */
     public function prepend(ContainerBuilder $container)
     {
-        // generate a config array with the content of `config.yml` file
-        $configArray = Yaml::parse(file_get_contents(dirname(__DIR__) . '/Resources/config/config.yaml'));
+        // Generate a config array with the content of `liip_theme.yml` file
+        $liipThemeConfig = Yaml::parse(file_get_contents(dirname(__DIR__) . '/Resources/config/liip_theme.yaml'));
+        // Prepend the `liip_theme` settings
+        $container->prependExtensionConfig('liip_theme', $liipThemeConfig['liip_theme']);
 
-        // prepend the `liip_theme` settings
-        $container->prependExtensionConfig('liip_theme', $configArray['liip_theme']);
+        // get all bundles
+        $bundles = $container->getParameter('kernel.bundles');
 
-        // TODO: inject service instead
-        $themeLocator = new ThemeLocator($container->getParameter('kernel.project_dir'));
+        if (isset($bundles['HelisSettingsManagerBundle'])) {
+            // Generate a config array with the content of `settings_manager.yml` file
+            $settings = Yaml::parse(file_get_contents(dirname(__DIR__) . '/Resources/config/settings_manager.yaml'));
 
-        // process the configuration
-        $configs = $container->getExtensionConfig(HarmonyCoreExtension::ALIAS);
-        // use the Configuration class to generate a config array
-        $config = $this->processConfiguration(new Configuration($themeLocator->discoverThemes()), $configs);
-        foreach ($config as $key => $value) {
-            $container->setParameter(HarmonyCoreExtension::ALIAS . '.' . $key, $value);
+            // TODO: inject service instead
+            $themeLocator = new ThemeLocator($container->getParameter('kernel.project_dir'));
+
+            $settings['helis_settings_manager']['settings'][0]['choices'] = $themeLocator->discoverThemes();
+
+            // Prepend the `helis_settings_manager` settings
+            $container->prependExtensionConfig('helis_settings_manager', $settings['helis_settings_manager']);
         }
     }
 }
