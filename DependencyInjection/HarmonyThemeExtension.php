@@ -58,7 +58,10 @@ class HarmonyThemeExtension extends Extension implements PrependExtensionInterfa
             // TODO: inject service instead
             $themeLocator = new ThemeLocator($container->getParameter('kernel.project_dir'));
 
-            $settings['helis_settings_manager']['settings'][0]['choices'] = array_flip($themeLocator->discoverThemes());
+            // Add themes to choices list
+            $themes                                                       = $themeLocator->discoverThemes();
+            $settings['helis_settings_manager']['settings'][0]['choices'] = array_combine(array_values($themes),
+                array_values($themes));
 
             // Prepend the `helis_settings_manager` settings
             $container->prependExtensionConfig('helis_settings_manager', $settings['helis_settings_manager']);
