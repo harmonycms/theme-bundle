@@ -17,7 +17,7 @@ services:
 
   harmony.theme.twig.extension:
     class: Harmony\Bundle\ThemeBundle\Twig\Extension
-    arguments: ['@assets.packages', '@liip_theme.active_theme', '@service_container']
+    arguments: ['@assets.packages', '@liip_theme.active_theme', '@Helis\SettingsManagerBundle\Settings\SettingsRouter']
     public: false
     tags:
       - { name: twig.extension }

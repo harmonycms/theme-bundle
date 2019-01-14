@@ -2,11 +2,10 @@
 
 namespace Harmony\Bundle\ThemeBundle\Twig;
 
-use Harmony\Bundle\CoreBundle\DependencyInjection\HarmonyCoreExtension;
 use Harmony\Bundle\ThemeBundle\ActiveTheme;
 use Harmony\Bundle\ThemeBundle\HarmonyThemeBundle;
+use Helis\SettingsManagerBundle\Settings\SettingsRouter;
 use Symfony\Component\Asset\Packages;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
 use Twig\TwigFunction;
@@ -26,21 +25,21 @@ class Extension extends AbstractExtension implements Twig_Extension_GlobalsInter
     /** @var ActiveTheme $activeTheme */
     protected $activeTheme;
 
-    /** @var ContainerInterface */
-    protected $container;
+    /** @var SettingsRouter $settingsRouter */
+    protected $settingsRouter;
 
     /**
      * Extension constructor.
      *
-     * @param Packages           $packages
-     * @param ActiveTheme        $activeTheme
-     * @param ContainerInterface $container
+     * @param Packages       $packages
+     * @param ActiveTheme    $activeTheme
+     * @param SettingsRouter $settingsRouter
      */
-    public function __construct(Packages $packages, ActiveTheme $activeTheme, ContainerInterface $container)
+    public function __construct(Packages $packages, ActiveTheme $activeTheme, SettingsRouter $settingsRouter)
     {
-        $this->packages    = $packages;
-        $this->activeTheme = $activeTheme;
-        $this->container   = $container;
+        $this->packages       = $packages;
+        $this->activeTheme    = $activeTheme;
+        $this->settingsRouter = $settingsRouter;
     }
 
     /**
@@ -72,7 +71,7 @@ class Extension extends AbstractExtension implements Twig_Extension_GlobalsInter
     {
         return [
             'harmony' => [
-                'site_name' => $this->container->getParameter(HarmonyCoreExtension::ALIAS . '.settings')['site_name']
+                'site_name' => $this->settingsRouter->get('site_name')
             ]
         ];
     }
