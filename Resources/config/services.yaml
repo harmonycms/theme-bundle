@@ -5,7 +5,7 @@ services:
 
   harmony.theme.theme_resolver:
     class: Harmony\Bundle\ThemeBundle\Services\ThemeResolver
-    arguments: ['@service_container']
+    arguments: ['@Helis\SettingsManagerBundle\Settings\SettingsRouter']
 
   liip_theme.active_theme:
     class: Harmony\Bundle\ThemeBundle\ActiveTheme

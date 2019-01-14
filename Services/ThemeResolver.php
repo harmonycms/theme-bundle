@@ -2,8 +2,7 @@
 
 namespace Harmony\Bundle\ThemeBundle\Services;
 
-use Harmony\Bundle\CoreBundle\DependencyInjection\HarmonyCoreExtension;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Helis\SettingsManagerBundle\Settings\SettingsRouter;
 
 /**
  * Determines the theme that should currently be used.
@@ -13,17 +12,17 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class ThemeResolver
 {
 
-    /** @var ContainerInterface */
-    protected $container;
+    /** @var SettingsRouter $settingsRouter */
+    protected $settingsRouter;
 
     /**
      * ThemeResolver constructor.
      *
-     * @param ContainerInterface $container
+     * @param SettingsRouter $settingsRouter
      */
-    public function __construct(ContainerInterface $container)
+    public function __construct(SettingsRouter $settingsRouter)
     {
-        $this->container = $container;
+        $this->settingsRouter = $settingsRouter;
     }
 
     /**
@@ -33,6 +32,6 @@ class ThemeResolver
      */
     public function getActiveTheme(): ?string
     {
-        return $this->container->getParameter(HarmonyCoreExtension::ALIAS . '.settings')['theme']['value'];
+        return $this->settingsRouter->get('theme', null);
     }
 }
