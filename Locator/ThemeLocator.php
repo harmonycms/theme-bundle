@@ -5,10 +5,9 @@ namespace Harmony\Bundle\ThemeBundle\Locator;
 use Harmony\Bundle\ThemeBundle\HarmonyThemeBundle;
 use Harmony\Bundle\ThemeBundle\Json\JsonFile;
 use Harmony\Bundle\ThemeBundle\Model\Theme;
+use JMS\Serializer\Serializer;
+use JMS\Serializer\SerializerBuilder;
 use Symfony\Component\Finder\Finder;
-use Symfony\Component\Serializer\Encoder\JsonEncoder;
-use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
-use Symfony\Component\Serializer\Serializer;
 
 /**
  * Class ThemeLocator
@@ -35,7 +34,7 @@ class ThemeLocator
     public function __construct(string $projectDir = '')
     {
         $this->projectDir = $projectDir;
-        $this->serializer = new Serializer([new ObjectNormalizer()], [new JsonEncoder()]);
+        $this->serializer = SerializerBuilder::create()->build();
     }
 
     /**

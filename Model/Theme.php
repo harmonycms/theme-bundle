@@ -2,6 +2,8 @@
 
 namespace Harmony\Bundle\ThemeBundle\Model;
 
+use JMS\Serializer\Annotation as Serializer;
+
 /**
  * Class Theme
  *
@@ -11,41 +13,51 @@ class Theme
 {
 
     /**
+     * @Serializer\Type(name="string")
      * @var string $name
      */
     private $name;
 
     /**
+     * @Serializer\Type(name="string")
      * @var string $description
      */
     private $description;
 
     /**
+     * @Serializer\Type(name="string")
      * @var string $homepage
      */
     private $homepage;
 
     /**
+     * @Serializer\Type(name="string")
      * @var string $license
      */
     private $license;
 
     /**
+     * @Serializer\Type(name="string")
      * @var string $version
      */
     private $version;
 
     /**
+     * @Serializer\Type(name="array<Harmony\Bundle\ThemeBundle\Model\ThemeAuthor>")
      * @var ThemeAuthor[] $authors
      */
     private $authors = [];
 
     /**
+     * @Serializer\Type(name="string")
      * @var string $path
      */
     private $path;
 
-    /** @var string $dir */
+    /**
+     * @Serializer\Type(name="string")
+     * @var string $dir
+     */
     private $dir;
 
     /**
