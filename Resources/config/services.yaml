@@ -1,7 +1,7 @@
 services:
   harmony.theme.theme_locator:
     class: Harmony\Bundle\ThemeBundle\Locator\ThemeLocator
-    arguments: ['%kernel.project_dir%']
+    arguments: ['%kernel.project_dir%', '@jms_serializer']
 
   harmony.theme.theme_resolver:
     class: Harmony\Bundle\ThemeBundle\Services\ThemeResolver

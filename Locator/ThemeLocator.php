@@ -6,7 +6,6 @@ use Harmony\Bundle\ThemeBundle\HarmonyThemeBundle;
 use Harmony\Bundle\ThemeBundle\Json\JsonFile;
 use Harmony\Bundle\ThemeBundle\Model\Theme;
 use JMS\Serializer\Serializer;
-use JMS\Serializer\SerializerBuilder;
 use Symfony\Component\Finder\Finder;
 
 /**
@@ -29,12 +28,13 @@ class ThemeLocator
     /**
      * ThemeLocator constructor.
      *
-     * @param string $projectDir
+     * @param string     $projectDir
+     * @param Serializer $serializer
      */
-    public function __construct(string $projectDir = '')
+    public function __construct(string $projectDir, Serializer $serializer)
     {
         $this->projectDir = $projectDir;
-        $this->serializer = SerializerBuilder::create()->build();
+        $this->serializer = $serializer;
     }
 
     /**
