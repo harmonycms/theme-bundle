@@ -2,7 +2,6 @@
 
 namespace Harmony\Bundle\ThemeBundle\DependencyInjection;
 
-use Harmony\Bundle\ThemeBundle\Locator\ThemeLocator;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\Extension;
@@ -47,24 +46,5 @@ class HarmonyThemeExtension extends Extension implements PrependExtensionInterfa
         $liipThemeConfig = Yaml::parse(file_get_contents(dirname(__DIR__) . '/Resources/config/liip_theme.yaml'));
         // Prepend the `liip_theme` settings
         $container->prependExtensionConfig('liip_theme', $liipThemeConfig['liip_theme']);
-
-        // get all bundles
-        $bundles = $container->getParameter('kernel.bundles');
-
-        if (isset($bundles['HelisSettingsManagerBundle'])) {
-            // Generate a config array with the content of `settings_manager.yml` file
-            $settings = Yaml::parse(file_get_contents(dirname(__DIR__) . '/Resources/config/settings_manager.yaml'));
-
-            // TODO: inject service instead
-            $themeLocator = new ThemeLocator($container->getParameter('kernel.project_dir'));
-
-            // Add themes to choices list
-            $themes                                                       = $themeLocator->discoverThemes();
-            $settings['helis_settings_manager']['settings'][0]['choices'] = array_combine(array_values($themes),
-                array_values($themes));
-
-            // Prepend the `helis_settings_manager` settings
-            $container->prependExtensionConfig('helis_settings_manager', $settings['helis_settings_manager']);
-        }
     }
 }

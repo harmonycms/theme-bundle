@@ -2,10 +2,7 @@
 
 namespace Harmony\Bundle\ThemeBundle;
 
-use Harmony\Bundle\ThemeBundle\DependencyInjection\Compiler\ThemeCompilerPass;
 use Harmony\Bundle\ThemeBundle\DependencyInjection\HarmonyThemeExtension;
-use Symfony\Component\DependencyInjection\Compiler\PassConfig;
-use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
@@ -29,16 +26,5 @@ class HarmonyThemeBundle extends Bundle
     public function getContainerExtension(): ExtensionInterface
     {
         return new HarmonyThemeExtension();
-    }
-
-    /**
-     * Builds the bundle.
-     * It is only ever called once when the cache is empty.
-     *
-     * @param ContainerBuilder $container
-     */
-    public function build(ContainerBuilder $container)
-    {
-        $container->addCompilerPass(new ThemeCompilerPass(), PassConfig::TYPE_BEFORE_OPTIMIZATION, -10);
     }
 }
