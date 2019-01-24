@@ -31,8 +31,7 @@ class ActiveTheme extends LiipActiveTheme
     public function __construct(?string $name, array $themes, DeviceDetectionInterface $deviceDetection,
                                 ThemeLocator $themeLocator)
     {
-        $themes          = $themeLocator->discoverThemes();
-        $this->themeData = $themeLocator->getThemeData();
+        $themes = $this->themeData = array_keys($themeLocator->discoverThemes());
         parent::__construct($name, $themes, $deviceDetection);
     }
 
