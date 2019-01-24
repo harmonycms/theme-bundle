@@ -45,7 +45,7 @@ class ThemeAssetsInstallCommand extends Command
      * @param ActiveTheme $activeTheme
      * @param string      $projectDir
      */
-    public function __construct(string $name = null, Filesystem $filesystem, ActiveTheme $activeTheme,
+    public function __construct(?string $name, Filesystem $filesystem, ActiveTheme $activeTheme,
                                 string $projectDir)
     {
         parent::__construct($name);
