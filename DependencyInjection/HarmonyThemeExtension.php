@@ -46,5 +46,16 @@ class HarmonyThemeExtension extends Extension implements PrependExtensionInterfa
         $liipThemeConfig = Yaml::parse(file_get_contents(dirname(__DIR__) . '/Resources/config/liip_theme.yaml'));
         // Prepend the `liip_theme` settings
         $container->prependExtensionConfig('liip_theme', $liipThemeConfig['liip_theme']);
+
+        // get all bundles
+        $bundles = $container->getParameter('kernel.bundles');
+
+        if (isset($bundles['HelisSettingsManagerBundle'])) {
+            // Generate a config array with the content of `settings_manager.yml` file
+            $settings = Yaml::parse(file_get_contents(dirname(__DIR__) . '/Resources/config/settings_manager.yaml'));
+
+            // Prepend the `helis_settings_manager` settings
+            $container->prependExtensionConfig('helis_settings_manager', $settings['helis_settings_manager']);
+        }
     }
 }
