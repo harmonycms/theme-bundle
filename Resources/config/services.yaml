@@ -6,6 +6,7 @@ services:
     bind:
       string $projectDir: '%kernel.project_dir%'
       $settingsRouter: '@Helis\SettingsManagerBundle\Settings\SettingsRouter'
+      $activeTheme: '@Harmony\Bundle\ThemeBundle\ActiveTheme'
 
   harmony.theme.theme_locator:
     class: Harmony\Bundle\ThemeBundle\Locator\ThemeLocator
@@ -33,3 +34,9 @@ services:
   Harmony\Bundle\ThemeBundle\Twig\AssetsExtension: '@twig.extension.assets'
 
   Harmony\Bundle\ThemeBundle\Command\ThemeAssetsInstallCommand: ~
+
+  liip_theme.theme_request_listener:
+    class: Harmony\Bundle\ThemeBundle\EventListener\ThemeRequestListener
+    tags:
+      - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest }
+  Harmony\Bundle\ThemeBundle\EventListener\ThemeRequestListener: '@liip_theme.theme_request_listener'
