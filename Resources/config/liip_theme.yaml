@@ -2,4 +2,4 @@
 liip_theme:
   path_patterns:
     app_resource:
-      - '%kernel.project_dir%/themes/%%current_theme%%/%%template%%'
+      - '%kernel.theme_dir%/%%current_theme%%/%%template%%'
