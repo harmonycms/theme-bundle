@@ -61,6 +61,12 @@ class Theme
     private $dir;
 
     /**
+     * @Serializer\Type(name="array<Harmony\Bundle\ThemeBundle\Model\ThemeExtra>")
+     * @var ThemeExtra[] $extra
+     */
+    private $extra = [];
+
+    /**
      * @return string
      */
     public function getName(): string
@@ -216,6 +222,26 @@ class Theme
     public function setDir(string $dir): Theme
     {
         $this->dir = $dir;
+
+        return $this;
+    }
+
+    /**
+     * @return ThemeExtra[]
+     */
+    public function getExtra(): array
+    {
+        return $this->extra;
+    }
+
+    /**
+     * @param ThemeExtra[] $extra
+     *
+     * @return Theme
+     */
+    public function setExtra(array $extra): Theme
+    {
+        $this->extra = $extra;
 
         return $this;
     }
