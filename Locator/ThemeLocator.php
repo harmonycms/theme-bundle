@@ -54,10 +54,12 @@ class ThemeLocator
             if (file_exists($composer)) {
                 $json = new JsonFile($composer);
                 if ($json->validateSchema()) {
-                    /** @var Theme $theme */
-                    $theme = $this->serializer->deserialize(file_get_contents($json->getPath()), Theme::class, 'json');
-                    $theme->setDir($file->getFilename())->setPath($file->getPathname());
-                    $this->themeData[$file->getFilename()] = $theme;
+                    $data         = $json->read();
+                    $data['dir']  = $file->getFilename();
+                    $data['path'] = $file->getPathname();
+
+                    $this->themeData[$file->getFilename()] = $this->serializer->deserialize(json_encode($data),
+                        Theme::class, 'json');
                 }
             }
         }
