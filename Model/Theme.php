@@ -69,7 +69,7 @@ class Theme
     /**
      * @var string $preview
      */
-    private $preview = '%kernel.theme_dir%/%current_theme%/preview.{jpg,jpeg,png,gif}';
+    private $preview = '%current_theme%/preview.{jpg,jpeg,png,gif}';
 
     /**
      * @return string

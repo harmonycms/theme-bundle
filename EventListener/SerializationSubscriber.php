@@ -68,9 +68,6 @@ class SerializationSubscriber implements EventSubscriberInterface
     {
         /** @var Theme $theme */
         $theme = $event->getObject();
-        $theme->setPreview(strtr($theme->getPreview(), [
-            '%kernel.theme_dir%' => '/themes',
-            '%current_theme%'    => $theme->getDir()
-        ]));
+        $theme->setPreview('/themes/' . strtr($theme->getPreview(), ['%current_theme%' => $theme->getDir()]));
     }
 }
