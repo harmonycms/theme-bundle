@@ -5,6 +5,7 @@ namespace Harmony\Bundle\ThemeBundle\EventListener;
 use Harmony\Bundle\ThemeBundle\Model\Theme;
 use JMS\Serializer\EventDispatcher\Events;
 use JMS\Serializer\EventDispatcher\EventSubscriberInterface;
+use JMS\Serializer\EventDispatcher\ObjectEvent;
 use JMS\Serializer\EventDispatcher\PreDeserializeEvent;
 
 /**
@@ -35,6 +36,12 @@ class SerializationSubscriber implements EventSubscriberInterface
                 'method' => 'onPreDeserialize',
                 'class'  => Theme::class,
                 'format' => 'json'
+            ],
+            [
+                'event'  => Events::POST_DESERIALIZE,
+                'method' => 'onPostThemeDeserialize',
+                'class'  => Theme::class,
+                'format' => 'json'
             ]
         ];
     }
@@ -52,5 +59,18 @@ class SerializationSubscriber implements EventSubscriberInterface
             }
         }
         $event->setData($data);
+    }
+
+    /**
+     * @param ObjectEvent $event
+     */
+    public function onPostThemeDeserialize(ObjectEvent $event)
+    {
+        /** @var Theme $theme */
+        $theme = $event->getObject();
+        $theme->setPreview(strtr($theme->getPreview(), [
+            '%kernel.theme_dir%' => '/themes',
+            '%current_theme%'    => $theme->getDir()
+        ]));
     }
 }
