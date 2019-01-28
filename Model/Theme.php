@@ -62,9 +62,14 @@ class Theme
 
     /**
      * @Serializer\Type(name="Harmony\Bundle\ThemeBundle\Model\ThemeExtra")
-     * @var ThemeExtra $extra
+     * @var null|ThemeExtra $extra
      */
     private $extra;
+
+    /**
+     * @var string $preview
+     */
+    private $preview = '%kernel.theme_dir%/%current_theme%/preview.{jpg,jpeg,png,gif}';
 
     /**
      * @return string
@@ -227,9 +232,9 @@ class Theme
     }
 
     /**
-     * @return ThemeExtra
+     * @return null|ThemeExtra
      */
-    public function getExtra(): ThemeExtra
+    public function getExtra(): ?ThemeExtra
     {
         return $this->extra;
     }
@@ -244,5 +249,13 @@ class Theme
         $this->extra = $extra;
 
         return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPreview(): string
+    {
+        return $this->preview;
     }
 }

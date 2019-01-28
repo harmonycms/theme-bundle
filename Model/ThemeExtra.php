@@ -26,9 +26,9 @@ class ThemeExtra
 
     /**
      * @Serializer\Type(name="string")
-     * @var string $screenshot
+     * @var string $preview
      */
-    private $screenshot;
+    private $preview;
 
     /**
      * @Serializer\Type(name="array<string>")
@@ -79,19 +79,19 @@ class ThemeExtra
     /**
      * @return string
      */
-    public function getScreenshot(): string
+    public function getPreview(): string
     {
-        return $this->screenshot;
+        return $this->preview;
     }
 
     /**
-     * @param string $screenshot
+     * @param string $preview
      *
      * @return ThemeExtra
      */
-    public function setScreenshot(string $screenshot): ThemeExtra
+    public function setPreview(string $preview): ThemeExtra
     {
-        $this->screenshot = $screenshot;
+        $this->preview = $preview;
 
         return $this;
     }
