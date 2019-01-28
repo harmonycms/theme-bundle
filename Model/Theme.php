@@ -61,10 +61,10 @@ class Theme
     private $dir;
 
     /**
-     * @Serializer\Type(name="array<Harmony\Bundle\ThemeBundle\Model\ThemeExtra>")
-     * @var ThemeExtra[] $extra
+     * @Serializer\Type(name="Harmony\Bundle\ThemeBundle\Model\ThemeExtra")
+     * @var ThemeExtra $extra
      */
-    private $extra = [];
+    private $extra;
 
     /**
      * @return string
@@ -227,19 +227,19 @@ class Theme
     }
 
     /**
-     * @return ThemeExtra[]
+     * @return ThemeExtra
      */
-    public function getExtra(): array
+    public function getExtra(): ThemeExtra
     {
         return $this->extra;
     }
 
     /**
-     * @param ThemeExtra[] $extra
+     * @param ThemeExtra $extra
      *
      * @return Theme
      */
-    public function setExtra(array $extra): Theme
+    public function setExtra(ThemeExtra $extra): Theme
     {
         $this->extra = $extra;
 
