@@ -14,19 +14,19 @@ class ThemeExtra
 
     /**
      * @Serializer\Type(name="string")
-     * @var string $name
+     * @var null|string $name
      */
     private $name;
 
     /**
      * @Serializer\Type(name="string")
-     * @var string $description
+     * @var null|string $description
      */
     private $description;
 
     /**
      * @Serializer\Type(name="string")
-     * @var string $preview
+     * @var null|string $preview
      */
     private $preview;
 
@@ -37,9 +37,9 @@ class ThemeExtra
     private $parents = [];
 
     /**
-     * @return string
+     * @return null|string
      */
-    public function getName(): string
+    public function getName(): ?string
     {
         return $this->name;
     }
@@ -57,9 +57,9 @@ class ThemeExtra
     }
 
     /**
-     * @return string
+     * @return null|string
      */
-    public function getDescription(): string
+    public function getDescription(): ?string
     {
         return $this->description;
     }
@@ -77,9 +77,9 @@ class ThemeExtra
     }
 
     /**
-     * @return string
+     * @return null|string
      */
-    public function getPreview(): string
+    public function getPreview(): ?string
     {
         return $this->preview;
     }
