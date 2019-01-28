@@ -258,4 +258,16 @@ class Theme
     {
         return $this->preview;
     }
+
+    /**
+     * @param string $preview
+     *
+     * @return Theme
+     */
+    public function setPreview(string $preview): Theme
+    {
+        $this->preview = $preview;
+
+        return $this;
+    }
 }
