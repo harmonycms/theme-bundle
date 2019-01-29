@@ -69,7 +69,7 @@ class Theme
     /**
      * @var string $preview
      */
-    private $preview = '%current_theme%/preview.{jpg,jpeg,png,gif}';
+    private $preview = '/assets/preview.{jpg,jpeg,png,gif}';
 
     /**
      * @return string
@@ -256,7 +256,12 @@ class Theme
      */
     public function getPreview(): string
     {
-        return $this->preview;
+        $array = glob($this->getPath() . $this->preview, GLOB_BRACE);
+        if (isset($array[0])) {
+            return sprintf('/themes/%s/%s', $this->getDir(), (new \SplFileInfo($array[0]))->getBasename());
+        }
+
+        return '';
     }
 
     /**
