@@ -2,8 +2,8 @@
 
 namespace Harmony\Bundle\ThemeBundle\Command;
 
-use Harmony\Bundle\ThemeBundle\ActiveTheme;
 use InvalidArgumentException;
+use Liip\ThemeBundle\ActiveTheme;
 use Symfony\Bundle\FrameworkBundle\Command\AssetsInstallCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Exception\LogicException;

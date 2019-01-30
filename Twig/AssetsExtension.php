@@ -2,8 +2,8 @@
 
 namespace Harmony\Bundle\ThemeBundle\Twig;
 
-use Harmony\Bundle\ThemeBundle\ActiveTheme;
 use Harmony\Bundle\ThemeBundle\HarmonyThemeBundle;
+use Liip\ThemeBundle\ActiveTheme;
 use Symfony\Bridge\Twig\Extension\AssetExtension as BridgeAssetExtension;
 use Symfony\Component\Asset\Packages;
 

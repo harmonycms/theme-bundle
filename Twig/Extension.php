@@ -2,9 +2,9 @@
 
 namespace Harmony\Bundle\ThemeBundle\Twig;
 
-use Harmony\Bundle\ThemeBundle\ActiveTheme;
 use Harmony\Bundle\ThemeBundle\HarmonyThemeBundle;
 use Helis\SettingsManagerBundle\Settings\SettingsRouter;
+use Liip\ThemeBundle\ActiveTheme;
 use Symfony\Component\Asset\Packages;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;

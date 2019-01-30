@@ -2,8 +2,8 @@
 
 namespace Harmony\Bundle\ThemeBundle\EventListener;
 
-use Harmony\Bundle\ThemeBundle\ActiveTheme;
 use Helis\SettingsManagerBundle\Settings\SettingsRouter;
+use Liip\ThemeBundle\ActiveTheme;
 use Liip\ThemeBundle\Helper\DeviceDetectionInterface;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
