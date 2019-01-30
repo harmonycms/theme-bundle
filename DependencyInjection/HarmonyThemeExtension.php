@@ -37,7 +37,6 @@ class HarmonyThemeExtension extends Extension implements PrependExtensionInterfa
      *
      * @param ContainerBuilder $container
      *
-     * @throws \Harmony\Bundle\ThemeBundle\Json\JsonValidationException
      * @throws \Exception
      */
     public function prepend(ContainerBuilder $container)
