@@ -43,8 +43,13 @@ class HarmonyThemeExtension extends Extension implements PrependExtensionInterfa
     {
         // Generate a config array with the content of `liip_theme.yml` file
         $liipThemeConfig = Yaml::parse(file_get_contents(dirname(__DIR__) . '/Resources/config/liip_theme.yaml'));
+
         // Prepend the `liip_theme` settings
         $container->prependExtensionConfig('liip_theme', $liipThemeConfig['liip_theme']);
+
+        // Prepend the `liip_theme_provider` default themes path
+        $container->prependExtensionConfig('liip_theme_provider',
+            ['filesystem' => ['paths' => $container->getParameter('kernel.theme_dir')]]);
 
         // get all bundles
         $bundles = $container->getParameter('kernel.bundles');
