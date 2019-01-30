@@ -1,5 +1,6 @@
 # Liip theme configuration
 liip_theme:
+  load_controllers: false
   path_patterns:
     app_resource:
       - '%kernel.theme_dir%/%%current_theme%%/%%template%%'
