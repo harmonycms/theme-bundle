@@ -58,46 +58,10 @@ class FilesystemLoader extends Base
     protected function findTemplate($template, $throw = true)
     {
         // Set active theme from database/settings
-        $this->activeTheme->setName($this->settingsRouter->get('theme'));
-
-        $logicalName = (string)$template;
-
-        if ($this->activeTheme) {
-            $logicalName .= '|' . $this->activeTheme->getName();
+        if ($name = $this->settingsRouter->get('theme')) {
+            $this->activeTheme->setName($name);
         }
 
-        if (isset($this->cache[$logicalName])) {
-            return $this->cache[$logicalName];
-        }
-
-        $file     = null;
-        $previous = null;
-
-        try {
-            $templateReference = $this->parser->parse($template);
-            $file              = $this->locator->locate($templateReference);
-        }
-        catch (\Exception $e) {
-            $previous = $e;
-
-            // for BC
-            try {
-                $file = parent::findTemplate((string)$template);
-            }
-            catch (\Twig_Error_Loader $e) {
-                $previous = $e;
-            }
-        }
-
-        if (false === $file || null === $file) {
-            if ($throw) {
-                throw new \Twig_Error_Loader(sprintf('Unable to find template "%s".', $logicalName), - 1, null,
-                    $previous);
-            }
-
-            return false;
-        }
-
-        return $this->cache[$logicalName] = $file;
+        return parent::findTemplate($template, $throw);
     }
 }
