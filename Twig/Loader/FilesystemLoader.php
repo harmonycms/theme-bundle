@@ -3,7 +3,7 @@
 namespace Harmony\Bundle\ThemeBundle\Twig\Loader;
 
 use Helis\SettingsManagerBundle\Settings\SettingsRouter;
-use Liip\ThemeBundle\Twig\Loader\FilesystemLoader as Base;
+use Liip\ThemeBundle\Twig\Loader\FilesystemLoader as BaseFilesystemLoader;
 use Symfony\Component\Config\FileLocatorInterface;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Templating\TemplateNameParserInterface;
@@ -14,7 +14,7 @@ use Symfony\Component\Templating\TemplateReferenceInterface;
  *
  * @package Harmony\Bundle\ThemeBundle\Twig\Loader
  */
-class FilesystemLoader extends Base
+class FilesystemLoader extends BaseFilesystemLoader
 {
 
     /** @var KernelInterface $kernel */
