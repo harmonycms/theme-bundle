@@ -29,3 +29,9 @@ services:
   twig.loader.filesystem:
     class: Harmony\Bundle\ThemeBundle\Twig\Loader\FilesystemLoader
   Harmony\Bundle\ThemeBundle\Twig\Loader\FilesystemLoader: '@twig.loader.filesystem'
+
+  liip_theme.file_locator:
+    class: Harmony\Bundle\ThemeBundle\Locator\FileLocator
+    arguments:
+      $pathPatterns: '%liip_theme.path_patterns%'
+  Harmony\Bundle\ThemeBundle\Locator\FileLocator: '@liip_theme.file_locator'
