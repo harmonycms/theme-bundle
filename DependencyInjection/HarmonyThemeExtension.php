@@ -50,10 +50,6 @@ class HarmonyThemeExtension extends Extension implements PrependExtensionInterfa
         // Prepend the `liip_theme` settings
         $container->prependExtensionConfig('liip_theme', $liipThemeConfig['liip_theme']);
 
-        // Prepend the `liip_theme_provider` default themes path
-        $container->prependExtensionConfig('liip_theme_provider',
-            ['filesystem' => ['paths' => $container->getParameter('kernel.theme_dir')]]);
-
         // get all bundles
         $bundles = $container->getParameter('kernel.bundles');
 
