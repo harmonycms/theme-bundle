@@ -8,10 +8,6 @@ services:
       $settingsRouter: '@Helis\SettingsManagerBundle\Settings\SettingsRouter'
       $activeTheme: '@liip_theme.active_theme'
 
-  harmony.theme.theme_locator:
-    class: Harmony\Bundle\ThemeBundle\Locator\ThemeLocator
-  Harmony\Bundle\ThemeBundle\Locator\ThemeLocator: '@harmony.theme.theme_locator'
-
   harmony.theme.twig.extension:
     class: Harmony\Bundle\ThemeBundle\Twig\Extension
   Harmony\Bundle\ThemeBundle\Twig\Extension: '@harmony.theme.twig.extension'
@@ -27,7 +23,3 @@ services:
     tags:
       - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest }
   Harmony\Bundle\ThemeBundle\EventListener\ThemeRequestListener: '@liip_theme.theme_request_listener'
-
-  Harmony\Bundle\ThemeBundle\EventListener\SerializationSubscriber:
-    tags:
-      - { name: jms_serializer.event_subscriber }
