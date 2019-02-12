@@ -2,6 +2,7 @@
 
 namespace Harmony\Bundle\ThemeBundle\Twig\Loader;
 
+use Harmony\Bundle\CoreBundle\Component\HttpKernel\AbstractKernel;
 use Helis\SettingsManagerBundle\Settings\SettingsRouter;
 use Liip\ThemeBundle\Twig\Loader\FilesystemLoader as BaseFilesystemLoader;
 use Symfony\Component\Config\FileLocatorInterface;
@@ -28,11 +29,11 @@ class FilesystemLoader extends BaseFilesystemLoader
      *
      * @see TwigBundle own FilesystemLoader
      *
-     * @param FileLocatorInterface        $locator  A FileLocatorInterface instance
-     * @param TemplateNameParserInterface $parser   A TemplateNameParserInterface instance
-     * @param KernelInterface             $kernel
-     * @param SettingsRouter              $settingsRouter
-     * @param string|null                 $rootPath The root path common to all relative paths (null for getcwd())
+     * @param FileLocatorInterface           $locator  A FileLocatorInterface instance
+     * @param TemplateNameParserInterface    $parser   A TemplateNameParserInterface instance
+     * @param KernelInterface|AbstractKernel $kernel
+     * @param SettingsRouter                 $settingsRouter
+     * @param string|null                    $rootPath The root path common to all relative paths (null for getcwd())
      */
     public function __construct(FileLocatorInterface $locator, TemplateNameParserInterface $parser,
                                 KernelInterface $kernel, SettingsRouter $settingsRouter, ?string $rootPath = null)
@@ -57,6 +58,9 @@ class FilesystemLoader extends BaseFilesystemLoader
      */
     protected function findTemplate($template, $throw = true)
     {
+        // Set list of themes, otherwise generate error when clearing cache warmup
+        $this->activeTheme->setThemes(array_keys($this->kernel->getThemes()));
+
         // Set active theme from database/settings
         if ($name = $this->settingsRouter->get('theme')) {
             $this->activeTheme->setName($name);
