@@ -9,8 +9,8 @@ use Helis\SettingsManagerBundle\Model\SettingModel;
 use Helis\SettingsManagerBundle\Model\TagModel;
 use Helis\SettingsManagerBundle\Provider\DoctrineOrmSettingsProvider;
 use Helis\SettingsManagerBundle\Provider\Factory\ProviderFactoryInterface;
+use Helis\SettingsManagerBundle\Provider\ReadableSimpleSettingsProvider;
 use Helis\SettingsManagerBundle\Provider\SettingsProviderInterface;
-use Helis\SettingsManagerBundle\Provider\SimpleSettingsProvider;
 use Helis\SettingsManagerBundle\Provider\Traits\ReadOnlyProviderTrait;
 use LogicException;
 use Symfony\Component\HttpKernel\KernelInterface;
@@ -73,9 +73,11 @@ class ThemeProviderFactory implements ProviderFactoryInterface
         }
         /** @var SettingModel[] $settings */
         $settings = $this->serializer->denormalize($data, SettingModel::class . '[]');
-        $this->_updateSettingsForTheme($settings, $theme);
+        if (!empty($settings)) {
+            $this->_updateSettingsForTheme($settings, $theme);
+        }
 
-        return new SimpleSettingsProvider($settings);
+        return new ReadableSimpleSettingsProvider($settings);
     }
 
     /**
@@ -91,12 +93,15 @@ class ThemeProviderFactory implements ProviderFactoryInterface
      */
     private function _updateSettingsForTheme(array &$settings, ?ThemeInterface $theme): void
     {
+        $themeDomain = (new DomainModel())->setName('theme')->setEnabled(true)->setReadOnly(true);
+        $themeIdTag  = (new TagModel())->setName($theme->getIdentifier());
+
         /** @var SettingModel $setting */
         foreach ($settings as $setting) {
             // Set default domain to `theme`
-            $setting->setDomain((new DomainModel())->setName('theme')->setEnabled(true));
+            $setting->setDomain($themeDomain);
             if ($theme instanceof ThemeInterface) {
-                $setting->getTags()->add((new TagModel())->setName($theme->getIdentifier()));
+                $setting->getTags()->add($themeIdTag);
             }
         }
     }
