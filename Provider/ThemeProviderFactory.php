@@ -3,11 +3,16 @@
 namespace Harmony\Bundle\ThemeBundle\Provider;
 
 use Harmony\Bundle\CoreBundle\Component\HttpKernel\AbstractKernel;
+use Harmony\Sdk\Theme\ThemeInterface;
+use Helis\SettingsManagerBundle\Model\DomainModel;
 use Helis\SettingsManagerBundle\Model\SettingModel;
+use Helis\SettingsManagerBundle\Model\TagModel;
 use Helis\SettingsManagerBundle\Provider\DoctrineOrmSettingsProvider;
 use Helis\SettingsManagerBundle\Provider\Factory\ProviderFactoryInterface;
 use Helis\SettingsManagerBundle\Provider\SettingsProviderInterface;
 use Helis\SettingsManagerBundle\Provider\SimpleSettingsProvider;
+use Helis\SettingsManagerBundle\Provider\Traits\ReadOnlyProviderTrait;
+use LogicException;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Serializer\Exception\ExceptionInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
@@ -20,6 +25,8 @@ use Symfony\Component\Yaml\Yaml;
  */
 class ThemeProviderFactory implements ProviderFactoryInterface
 {
+
+    use ReadOnlyProviderTrait;
 
     /** @var DenormalizerInterface $serializer */
     protected $serializer;
@@ -52,23 +59,45 @@ class ThemeProviderFactory implements ProviderFactoryInterface
      */
     public function get(): SettingsProviderInterface
     {
-        $data = [];
-        // TODO: make something cleaner
+        $data  = [];
+        $theme = null;
         if (null !== $this->theme && $this->kernel instanceof AbstractKernel) {
             if ((null !== $theme = $this->kernel->getThemes()[$this->theme->getData()] ?? null) &&
                 $theme->hasSettings()) {
-                $path     = implode('/', array_slice(explode(DIRECTORY_SEPARATOR, $theme->getPath()), - 2, 2));
-                // TODO: get full path from ThemeInterface directly
-                $filepath = $this->kernel->getThemeDir() . DIRECTORY_SEPARATOR . $path . DIRECTORY_SEPARATOR .
-                    'settings.yaml';
-                // TODO: return parsed YAML from ThemeInterface???
-                $data     = Yaml::parseFile($filepath);
-                $data     = $data['settings'];
+                $data = Yaml::parseFile($theme->getSettingPath());
+                if (!isset($data['settings'])) {
+                    throw new LogicException('The root node \'settings\' is missing from the theme settings.yaml file!');
+                }
+                $data = $data['settings'];
             }
         }
-        // TODO: make something cleaner and safer
+        /** @var SettingModel[] $settings */
         $settings = $this->serializer->denormalize($data, SettingModel::class . '[]');
+        $this->_updateSettingsForTheme($settings, $theme);
 
         return new SimpleSettingsProvider($settings);
+    }
+
+    /**
+     * Override SettingModel values to be matched as a theme settings.
+     * A theme setting is defined by:
+     * - domain = theme
+     * - tags contain the theme name
+     *
+     * @param array               $settings
+     * @param ThemeInterface|null $theme
+     *
+     * @return void
+     */
+    private function _updateSettingsForTheme(array &$settings, ?ThemeInterface $theme): void
+    {
+        /** @var SettingModel $setting */
+        foreach ($settings as $setting) {
+            // Set default domain to `theme`
+            $setting->setDomain((new DomainModel())->setName('theme')->setEnabled(true));
+            if ($theme instanceof ThemeInterface) {
+                $setting->getTags()->add((new TagModel())->setName($theme->getIdentifier()));
+            }
+        }
     }
 }

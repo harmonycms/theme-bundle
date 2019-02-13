@@ -37,5 +37,7 @@ services:
   Harmony\Bundle\ThemeBundle\Locator\FileLocator: '@liip_theme.file_locator'
 
   Harmony\Bundle\ThemeBundle\Provider\ThemeProviderFactory:
+    arguments:
+      $serializer: '@settings_manager.serializer'
     tags:
       - { name: settings_manager.provider_factory, provider: theme, priority: 10 }
