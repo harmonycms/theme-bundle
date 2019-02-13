@@ -35,3 +35,7 @@ services:
     arguments:
       $pathPatterns: '%liip_theme.path_patterns%'
   Harmony\Bundle\ThemeBundle\Locator\FileLocator: '@liip_theme.file_locator'
+
+  Harmony\Bundle\ThemeBundle\Provider\ThemeProviderFactory:
+    tags:
+      - { name: settings_manager.provider_factory, provider: theme, priority: 10 }
