@@ -40,4 +40,4 @@ services:
     arguments:
       $serializer: '@settings_manager.serializer'
     tags:
-      - { name: settings_manager.provider_factory, provider: theme, priority: 10 }
+      - { name: settings_manager.provider_factory, provider: theme, priority: 5 }
