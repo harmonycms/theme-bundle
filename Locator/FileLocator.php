@@ -30,7 +30,7 @@ class FileLocator extends BaseFileLocator
             $themeName = $this->activeTheme->getName();
             if (isset($kernel->getThemes()[$themeName])) {
                 $theme           = $kernel->getThemes()[$themeName];
-                $this->lastTheme = implode('/', array_slice(explode(DIRECTORY_SEPARATOR, $theme->getPath()), - 2, 2));
+                $this->lastTheme = $theme->getShortName();
             }
         }
 
