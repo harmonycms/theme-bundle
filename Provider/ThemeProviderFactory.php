@@ -3,6 +3,7 @@
 namespace Harmony\Bundle\ThemeBundle\Provider;
 
 use Harmony\Bundle\CoreBundle\Component\HttpKernel\AbstractKernel;
+use Harmony\Bundle\ThemeBundle\DependencyInjection\SettingsConfiguration;
 use Harmony\Sdk\Theme\ThemeInterface;
 use Helis\SettingsManagerBundle\Model\DomainModel;
 use Helis\SettingsManagerBundle\Model\SettingModel;
@@ -13,6 +14,8 @@ use Helis\SettingsManagerBundle\Provider\ReadableSimpleSettingsProvider;
 use Helis\SettingsManagerBundle\Provider\SettingsProviderInterface;
 use Helis\SettingsManagerBundle\Provider\Traits\ReadOnlyProviderTrait;
 use LogicException;
+use Symfony\Component\Config\Definition\ConfigurationInterface;
+use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Serializer\Exception\ExceptionInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
@@ -64,12 +67,8 @@ class ThemeProviderFactory implements ProviderFactoryInterface
         if (null !== $this->theme && $this->kernel instanceof AbstractKernel) {
             if ((null !== $theme = $this->kernel->getThemes()[$this->theme->getData()] ?? null) &&
                 $theme->hasSettings()) {
-                $data = Yaml::parseFile($theme->getSettingPath());
-                if (!isset($data['settings'])) {
-                    throw new LogicException(sprintf('The root node "settings" is missing in the file %s',
-                        $theme->getSettingPath()));
-                }
-                $data = $data['settings'];
+                $configuration = new SettingsConfiguration();
+                $data          = $this->processConfiguration($configuration, Yaml::parseFile($theme->getSettingPath()));
             }
         }
         /** @var SettingModel[] $settings */
@@ -79,6 +78,19 @@ class ThemeProviderFactory implements ProviderFactoryInterface
         }
 
         return new ReadableSimpleSettingsProvider($settings);
+    }
+
+    /**
+     * @param ConfigurationInterface $configuration
+     * @param array                  $configs
+     *
+     * @return array
+     */
+    protected function processConfiguration(ConfigurationInterface $configuration, array $configs)
+    {
+        $processor = new Processor();
+
+        return $processor->processConfiguration($configuration, $configs);
     }
 
     /**
