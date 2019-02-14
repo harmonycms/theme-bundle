@@ -66,7 +66,8 @@ class ThemeProviderFactory implements ProviderFactoryInterface
                 $theme->hasSettings()) {
                 $data = Yaml::parseFile($theme->getSettingPath());
                 if (!isset($data['settings'])) {
-                    throw new LogicException('The root node \'settings\' is missing from the theme settings.yaml file!');
+                    throw new LogicException(sprintf('The root node "settings" is missing in the file %s',
+                        $theme->getSettingPath()));
                 }
                 $data = $data['settings'];
             }
