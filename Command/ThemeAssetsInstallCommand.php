@@ -32,9 +32,6 @@ class ThemeAssetsInstallCommand extends Command
     /** @var Filesystem $filesystem */
     protected $filesystem;
 
-    /** @var string $projectDir */
-    protected $projectDir;
-
     /** @var KernelInterface|AbstractKernel $kernel */
     protected $kernel;
 
@@ -43,14 +40,12 @@ class ThemeAssetsInstallCommand extends Command
      *
      * @param KernelInterface|AbstractKernel $kernel
      * @param Filesystem                     $filesystem
-     * @param string                         $projectDir
      */
-    public function __construct(KernelInterface $kernel, Filesystem $filesystem, string $projectDir)
+    public function __construct(KernelInterface $kernel, Filesystem $filesystem)
     {
         parent::__construct(null);
         $this->kernel     = $kernel;
         $this->filesystem = $filesystem;
-        $this->projectDir = $projectDir;
     }
 
     /**
