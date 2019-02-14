@@ -3,7 +3,7 @@
 namespace Harmony\Bundle\ThemeBundle\EventListener;
 
 use Harmony\Bundle\CoreBundle\Component\HttpKernel\AbstractKernel;
-use Helis\SettingsManagerBundle\Event\ConfigureMenuEvent;
+use Harmony\Bundle\MenuBundle\Event\ConfigureMenuEvent;
 use Symfony\Component\HttpKernel\KernelInterface;
 
 /**
