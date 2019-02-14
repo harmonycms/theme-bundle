@@ -2,10 +2,12 @@
 
 namespace Harmony\Bundle\ThemeBundle\Twig;
 
+use Harmony\Bundle\CoreBundle\Component\HttpKernel\AbstractKernel;
 use Harmony\Bundle\ThemeBundle\HarmonyThemeBundle;
 use Helis\SettingsManagerBundle\Settings\SettingsRouter;
 use Liip\ThemeBundle\ActiveTheme;
 use Symfony\Component\Asset\Packages;
+use Symfony\Component\HttpKernel\KernelInterface;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
 use Twig\TwigFunction;
@@ -28,15 +30,21 @@ class Extension extends AbstractExtension implements Twig_Extension_GlobalsInter
     /** @var SettingsRouter $settingsRouter */
     protected $settingsRouter;
 
+    /** @var KernelInterface|AbstractKernel $kernel */
+    protected $kernel;
+
     /**
      * Extension constructor.
      *
-     * @param Packages       $packages
-     * @param ActiveTheme    $activeTheme
-     * @param SettingsRouter $settingsRouter
+     * @param KernelInterface|AbstractKernel $kernel
+     * @param Packages                       $packages
+     * @param ActiveTheme                    $activeTheme
+     * @param SettingsRouter                 $settingsRouter
      */
-    public function __construct(Packages $packages, ActiveTheme $activeTheme, SettingsRouter $settingsRouter)
+    public function __construct(KernelInterface $kernel, Packages $packages, ActiveTheme $activeTheme,
+                                SettingsRouter $settingsRouter)
     {
+        $this->kernel         = $kernel;
         $this->packages       = $packages;
         $this->activeTheme    = $activeTheme;
         $this->settingsRouter = $settingsRouter;
@@ -84,7 +92,8 @@ class Extension extends AbstractExtension implements Twig_Extension_GlobalsInter
      */
     public function getThemeUrl(string $path, string $packageName = null): string
     {
-        $path = sprintf('%s/%s/%s', HarmonyThemeBundle::THEMES_DIR, $this->activeTheme->getName(), $path);
+        $theme = $this->kernel->getThemes()[$this->activeTheme->getName()];
+        $path  = sprintf('%s/%s/%s', HarmonyThemeBundle::THEMES_DIR, $theme->getShortName(), $path);
 
         return $this->packages->getUrl($path, $packageName);
     }
