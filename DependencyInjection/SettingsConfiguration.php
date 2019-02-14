@@ -2,7 +2,6 @@
 
 namespace Harmony\Bundle\ThemeBundle\DependencyInjection;
 
-use Helis\SettingsManagerBundle\Model\DomainModel;
 use Helis\SettingsManagerBundle\Model\Type;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
@@ -18,6 +17,7 @@ class SettingsConfiguration implements ConfigurationInterface
     /**
      * Generates the configuration tree builder.
      *
+     * @see \Helis\SettingsManagerBundle\DependencyInjection\Configuration
      * @return TreeBuilder The tree builder
      * @throws \ReflectionException
      */
@@ -31,24 +31,6 @@ class SettingsConfiguration implements ConfigurationInterface
                 ->children()
                     ->scalarNode('name')->isRequired()->end()
                     ->scalarNode('description')->end()
-                    ->arrayNode('domain')
-                        ->addDefaultsIfNotSet()
-                        ->beforeNormalization()
-                            ->ifString()
-                            ->then(function ($v) {
-                                return [
-                                    'name' => $v,
-                                    'enabled' => true, // domains from config are enabled by default
-                                    'read_only' => true, // all config domains are read only
-                                ];
-                            })
-                        ->end()
-                        ->children()
-                            ->scalarNode('name')->defaultValue(DomainModel::DEFAULT_NAME)->end()
-                            ->booleanNode('enabled')->defaultTrue()->end()
-                            ->booleanNode('read_only')->defaultTrue()->end()
-                        ->end()
-                    ->end()
                     ->arrayNode('tags')
                         ->arrayPrototype()
                             ->beforeNormalization()
