@@ -2,8 +2,8 @@
 
 namespace Harmony\Bundle\ThemeBundle\Command;
 
+use Harmony\Bundle\CoreBundle\Component\HttpKernel\AbstractKernel;
 use InvalidArgumentException;
-use Liip\ThemeBundle\ActiveTheme;
 use Symfony\Bundle\FrameworkBundle\Command\AssetsInstallCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Exception\LogicException;
@@ -15,6 +15,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Filesystem\Exception\IOException;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
+use Symfony\Component\HttpKernel\KernelInterface;
 
 /**
  * Class ThemeAssetsInstallCommand
@@ -31,25 +32,25 @@ class ThemeAssetsInstallCommand extends Command
     /** @var Filesystem $filesystem */
     protected $filesystem;
 
-    /** @var ActiveTheme $activeTheme */
-    protected $activeTheme;
-
     /** @var string $projectDir */
     protected $projectDir;
+
+    /** @var KernelInterface|AbstractKernel $kernel */
+    protected $kernel;
 
     /**
      * ThemeAssetsInstallCommand constructor.
      *
-     * @param Filesystem  $filesystem
-     * @param ActiveTheme $activeTheme
-     * @param string      $projectDir
+     * @param KernelInterface|AbstractKernel $kernel
+     * @param Filesystem                     $filesystem
+     * @param string                         $projectDir
      */
-    public function __construct(Filesystem $filesystem, ActiveTheme $activeTheme, string $projectDir)
+    public function __construct(KernelInterface $kernel, Filesystem $filesystem, string $projectDir)
     {
         parent::__construct(null);
-        $this->activeTheme = $activeTheme;
-        $this->filesystem  = $filesystem;
-        $this->projectDir  = $projectDir;
+        $this->kernel     = $kernel;
+        $this->filesystem = $filesystem;
+        $this->projectDir = $projectDir;
     }
 
     /**
@@ -126,25 +127,21 @@ EOT
         }
         $io->newLine();
 
-        $rows           = [];
-        $copyUsed       = false;
-        $exitCode       = 0;
-        $validAssetDirs = [];
+        $rows     = [];
+        $copyUsed = false;
+        $exitCode = 0;
 
-        foreach ($this->activeTheme->getThemes() as $theme) {
-            $originDir = $this->projectDir . DIRECTORY_SEPARATOR . self::THEMES_DIR . DIRECTORY_SEPARATOR . $theme .
-                DIRECTORY_SEPARATOR . self::ASSETS_DIR;
+        foreach ($this->kernel->getThemes() as $theme) {
+            $originDir = $theme->getPath() . DIRECTORY_SEPARATOR . self::ASSETS_DIR;
             if (!is_dir($originDir)) {
                 continue;
             }
-
-            $targetDir        = $themesDir . $theme;
-            $validAssetDirs[] = $theme;
+            $targetDir = $themesDir . $theme->getShortName();
 
             if (OutputInterface::VERBOSITY_VERBOSE <= $output->getVerbosity()) {
-                $message = sprintf("%s\n-> %s", $theme, $targetDir);
+                $message = sprintf("%s\n-> %s", $theme->getIdentifier(), $targetDir);
             } else {
-                $message = $theme;
+                $message = $theme->getIdentifier();
             }
 
             try {
@@ -187,10 +184,6 @@ EOT
                 ];
             }
         }
-
-        // remove the assets of the themes that no longer exist
-        $dirsToRemove = Finder::create()->depth(0)->directories()->exclude($validAssetDirs)->in($themesDir);
-        $this->filesystem->remove($dirsToRemove);
 
         $io->table(['', 'Theme', 'Method / Error'], $rows);
 
