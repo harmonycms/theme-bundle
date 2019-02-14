@@ -13,7 +13,6 @@ use Helis\SettingsManagerBundle\Provider\Factory\ProviderFactoryInterface;
 use Helis\SettingsManagerBundle\Provider\ReadableSimpleSettingsProvider;
 use Helis\SettingsManagerBundle\Provider\SettingsProviderInterface;
 use Helis\SettingsManagerBundle\Provider\Traits\ReadOnlyProviderTrait;
-use LogicException;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\HttpKernel\KernelInterface;
