@@ -41,7 +41,3 @@ services:
       $serializer: '@settings_manager.serializer'
     tags:
       - { name: settings_manager.provider_factory, provider: theme, priority: 5 }
-
-  Harmony\Bundle\ThemeBundle\EventListener\MenuListener:
-    tags:
-      - { name: kernel.event_listener, event: harmony_menu_configure, method: onMenuConfigure }
