@@ -2,30 +2,23 @@
 
 namespace Harmony\Bundle\ThemeBundle\EventListener;
 
+use Harmony\Bundle\CoreBundle\Component\HttpKernel\AbstractKernel;
 use Helis\SettingsManagerBundle\Settings\SettingsRouter;
-use Liip\ThemeBundle\ActiveTheme;
-use Liip\ThemeBundle\Helper\DeviceDetectionInterface;
+use Symfony\Component\Finder\Finder;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
+use Symfony\Component\HttpKernel\KernelInterface;
+use Symfony\Component\Translation\DataCollectorTranslator;
+use Symfony\Component\Translation\Translator;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
- * Listens to the request and changes the active theme based on a cookie.
+ * Class ThemeRequestListener
  *
- * @author Tobias Ebnöther <ebi@liip.ch>
- * @author Pascal Helfenstein <pascal@liip.ch>
+ * @package Harmony\Bundle\ThemeBundle\EventListener
  */
 class ThemeRequestListener
 {
-
-    /**
-     * @var ActiveTheme
-     */
-    protected $activeTheme;
-
-    /**
-     * @var DeviceDetectionInterface
-     */
-    protected $autoDetect;
 
     /**
      * @var string
@@ -35,17 +28,23 @@ class ThemeRequestListener
     /** @var SettingsRouter $settingsRouter */
     protected $settingsRouter;
 
+    /** @var KernelInterface $kernel */
+    protected $kernel;
+
+    /** @var TranslatorInterface|DataCollectorTranslator|Translator $translator */
+    protected $translator;
+
     /**
-     * @param ActiveTheme              $activeTheme
-     * @param DeviceDetectionInterface $autoDetect If to auto detect the theme based on the user agent
-     * @param SettingsRouter           $settingsRouter
+     * @param KernelInterface|AbstractKernel              $kernel
+     * @param SettingsRouter                              $settingsRouter
+     * @param TranslatorInterface|DataCollectorTranslator $translator
      */
-    public function __construct(ActiveTheme $activeTheme, SettingsRouter $settingsRouter,
-                                DeviceDetectionInterface $autoDetect = null)
+    public function __construct(KernelInterface $kernel, SettingsRouter $settingsRouter,
+                                TranslatorInterface $translator)
     {
-        $this->activeTheme    = $activeTheme;
-        $this->autoDetect     = $autoDetect;
+        $this->kernel         = $kernel;
         $this->settingsRouter = $settingsRouter;
+        $this->translator     = $translator;
     }
 
     /**
@@ -54,18 +53,31 @@ class ThemeRequestListener
     public function onKernelRequest(GetResponseEvent $event)
     {
         if (HttpKernelInterface::MASTER_REQUEST === $event->getRequestType()) {
-            if ($this->autoDetect) {
-                $this->autoDetect->setUserAgent($event->getRequest()->server->get('HTTP_USER_AGENT'));
-            }
+            $value = $this->settingsRouter->get('theme');
 
-            $value = $this->settingsRouter->get('theme', null);
-            if (!$value && $this->autoDetect instanceof DeviceDetectionInterface) {
-                $value = $this->autoDetect->getType();
-            }
+            if ((null !== $theme = $this->kernel->getThemes()[$value] ?? null) &&
+                $this->translator instanceof DataCollectorTranslator) {
 
-            if ($value && $value !== $this->activeTheme->getName() &&
-                in_array($value, $this->activeTheme->getThemes())) {
-                $this->activeTheme->setName($value);
+                $transPath = $theme->getPath() . '/translations';
+                if (\is_dir($transPath)) {
+                    $finder = new Finder();
+                    $finder->files()->in($transPath);
+                    foreach ($finder as $file) {
+                        list($domain, $locale) = explode('.', $file->getBasename(), 3);
+
+                        switch ($file->getExtension()) {
+                            case 'php':
+                                $this->translator->addResource('php', (string)$file, $locale, $domain);
+                                break;
+                            case 'xlf':
+                                $this->translator->addResource('xlf', (string)$file, $locale, $domain);
+                                break;
+                            case 'yaml':
+                                $this->translator->addResource('yaml', (string)$file, $locale, $domain);
+                                break;
+                        }
+                    }
+                }
             }
         }
     }
