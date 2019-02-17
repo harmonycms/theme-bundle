@@ -103,13 +103,8 @@ class AssetsExtension extends BridgeAssetExtension implements GlobalsInterface
      */
     public function getAssetUrl($path, $packageName = null): string
     {
-        $theme = $this->kernel->getThemes()[$this->activeTheme->getName()];
-        /** @var ThemeInterface|null $parentTheme */
-        $parentTheme = null;
-        if (!empty($theme->getParent())) {
-            $parentTheme = $theme->getParent();
-            $parentTheme = new $parentTheme();
-        }
+        $theme       = $this->kernel->getThemes()[$this->activeTheme->getName()];
+        $parentTheme = $theme->getParent();
 
         $assetPath = sprintf('%s/%s/%s', HarmonyThemeBundle::THEMES_DIR, $theme->getShortName(), $path);
 
