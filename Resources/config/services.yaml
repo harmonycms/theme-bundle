@@ -10,10 +10,6 @@ services:
       Symfony\Component\Config\FileLocatorInterface $locator: '@liip_theme.templating_locator'
       Symfony\Component\Templating\TemplateNameParserInterface $parser: '@templating.filename_parser'
 
-  harmony.theme.twig.extension:
-    class: Harmony\Bundle\ThemeBundle\Twig\Extension
-  Harmony\Bundle\ThemeBundle\Twig\Extension: '@harmony.theme.twig.extension'
-
   twig.extension.assets:
     class: Harmony\Bundle\ThemeBundle\Twig\AssetsExtension
   Harmony\Bundle\ThemeBundle\Twig\AssetsExtension: '@twig.extension.assets'
