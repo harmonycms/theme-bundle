@@ -2,6 +2,7 @@
 
 namespace Harmony\Bundle\ThemeBundle\DependencyInjection;
 
+use Harmony\Sdk\Theme\ThemeInterface;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\Extension;
@@ -30,6 +31,14 @@ class HarmonyThemeExtension extends Extension implements PrependExtensionInterfa
     {
         $loader = new Loader\YamlFileLoader($container, new FileLocator(dirname(__DIR__) . '/Resources/config'));
         $loader->load('services.yaml');
+
+        $twigFilesystemLoaderDefinition = $container->getDefinition('twig.loader.filesystem');
+        // register themes as Twig namespaces
+        foreach ($container->getParameter('kernel.themes') as $namespace => $class) {
+            /** @var ThemeInterface $themeClass */
+            $themeClass = new $class();
+            $twigFilesystemLoaderDefinition->addMethodCall('addPath', [$themeClass->getPath(), $namespace]);
+        }
     }
 
     /**
