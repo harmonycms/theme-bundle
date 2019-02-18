@@ -118,6 +118,6 @@ class AssetsExtension extends BridgeAssetExtension implements GlobalsInterface
             return parent::getAssetUrl($parentAssetPath, $packageName);
         }
 
-        return parent::getAssetUrl($assetPath, $packageName);
+        return parent::getAssetUrl($path, $packageName);
     }
 }
