@@ -103,19 +103,20 @@ class AssetsExtension extends BridgeAssetExtension implements GlobalsInterface
      */
     public function getAssetUrl($path, $packageName = null): string
     {
-        $theme       = $this->kernel->getThemes()[$this->activeTheme->getName()];
-        $parentTheme = $theme->getParent();
+        if (null !== $theme = $this->kernel->getThemes()[$this->activeTheme->getName()] ?? null) {
+            $parentTheme = $theme->getParent();
 
-        $assetPath = sprintf('%s/%s/%s', HarmonyThemeBundle::THEMES_DIR, $theme->getShortName(), $path);
+            $assetPath = sprintf('%s/%s/%s', HarmonyThemeBundle::THEMES_DIR, $theme->getShortName(), $path);
 
-        // Asset exists in current active theme
-        if (\file_exists(sprintf('%s/public/%s', $this->kernel->getProjectDir(), $assetPath))) {
-            return parent::getAssetUrl($assetPath, $packageName);
-        } // Has a parent theme
-        elseif (null !== $parentTheme && \file_exists(sprintf('%s/public/%s', $this->kernel->getProjectDir(),
-                $parentAssetPath = sprintf('%s/%s/%s', HarmonyThemeBundle::THEMES_DIR, $parentTheme->getShortName(),
-                    $path)))) {
-            return parent::getAssetUrl($parentAssetPath, $packageName);
+            // Asset exists in current active theme
+            if (\file_exists(sprintf('%s/public/%s', $this->kernel->getProjectDir(), $assetPath))) {
+                return parent::getAssetUrl($assetPath, $packageName);
+            } // Has a parent theme
+            elseif (null !== $parentTheme && \file_exists(sprintf('%s/public/%s', $this->kernel->getProjectDir(),
+                    $parentAssetPath = sprintf('%s/%s/%s', HarmonyThemeBundle::THEMES_DIR, $parentTheme->getShortName(),
+                        $path)))) {
+                return parent::getAssetUrl($parentAssetPath, $packageName);
+            }
         }
 
         return parent::getAssetUrl($path, $packageName);
