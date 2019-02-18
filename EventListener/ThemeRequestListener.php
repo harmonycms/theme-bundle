@@ -58,13 +58,19 @@ class ThemeRequestListener
             if ((null !== $theme = $this->kernel->getThemes()[$value] ?? null) &&
                 $this->translator instanceof DataCollectorTranslator) {
 
-                $transPath = $theme->getPath() . '/translations';
-                if (\is_dir($transPath)) {
-                    $finder = new Finder();
-                    $finder->files()->in($transPath);
+                $finder = (new Finder())->files();
+                if (\is_dir($transPath = $theme->getPath() . '/translations')) {
+                    $finder->in($transPath);
+                }
+                if (null !== $theme->getParent() &&
+                    \is_dir($parentTransPath = $theme->getParent()->getPath() . '/translations')) {
+                    $finder->in($parentTransPath);
+                }
+
+                try {
+                    /** @var \SplFileInfo $file */
                     foreach ($finder as $file) {
                         list($domain, $locale) = explode('.', $file->getBasename(), 3);
-
                         switch ($file->getExtension()) {
                             case 'php':
                                 $this->translator->addResource('php', (string)$file, $locale, $domain);
@@ -77,6 +83,8 @@ class ThemeRequestListener
                                 break;
                         }
                     }
+                }
+                catch (\LogicException $e) {
                 }
             }
         }
