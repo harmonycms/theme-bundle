@@ -65,7 +65,8 @@ class ThemeProviderFactory implements ProviderFactoryInterface
         $theme = null;
         if (null !== $this->theme && $this->kernel instanceof AbstractKernel) {
             if ((null !== $theme = $this->kernel->getThemes()[$this->theme->getData()] ?? null) &&
-                $theme->hasSettings() || (null !== $parentTheme = $theme->getParent()) && $parentTheme->hasSettings()) {
+                ($theme->hasSettings() ||
+                    (null !== $parentTheme = $theme->getParent()) && $parentTheme->hasSettings())) {
                 $settingPath = $theme->getSettingPath();
                 if (isset($parentTheme) && $parentTheme->hasSettings()) {
                     $settingPath = $parentTheme->getSettingPath();
