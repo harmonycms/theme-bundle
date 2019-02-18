@@ -59,12 +59,14 @@ class ThemeRequestListener
                 $this->translator instanceof DataCollectorTranslator) {
 
                 $finder = (new Finder())->files();
-                if (\is_dir($transPath = $theme->getPath() . '/translations')) {
-                    $finder->in($transPath);
-                }
+                // Parent need to be loaded first
                 if (null !== $theme->getParent() &&
                     \is_dir($parentTransPath = $theme->getParent()->getPath() . '/translations')) {
                     $finder->in($parentTransPath);
+                }
+                // Child (current) theme, will override translations
+                if (\is_dir($transPath = $theme->getPath() . '/translations')) {
+                    $finder->in($transPath);
                 }
 
                 try {
