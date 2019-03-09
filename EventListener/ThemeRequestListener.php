@@ -3,8 +3,11 @@
 namespace Harmony\Bundle\ThemeBundle\EventListener;
 
 use Harmony\Bundle\CoreBundle\Component\HttpKernel\AbstractKernel;
+use Harmony\Bundle\CoreBundle\Component\Routing\RouteCollectionBuilder;
+use Harmony\Bundle\ThemeBundle\Exception\NoActiveThemeException;
 use Helis\SettingsManagerBundle\Settings\SettingsRouter;
 use Symfony\Component\Finder\Finder;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\HttpKernel\KernelInterface;
@@ -34,26 +37,43 @@ class ThemeRequestListener
     /** @var TranslatorInterface|DataCollectorTranslator|Translator $translator */
     protected $translator;
 
+    /** @var RouteCollectionBuilder $builder */
+    protected $builder;
+
     /**
      * @param KernelInterface|AbstractKernel              $kernel
      * @param SettingsRouter                              $settingsRouter
      * @param TranslatorInterface|DataCollectorTranslator $translator
+     * @param RouteCollectionBuilder                      $builder
      */
     public function __construct(KernelInterface $kernel, SettingsRouter $settingsRouter,
-                                TranslatorInterface $translator)
+                                TranslatorInterface $translator, RouteCollectionBuilder $builder)
     {
         $this->kernel         = $kernel;
         $this->settingsRouter = $settingsRouter;
         $this->translator     = $translator;
+        $this->builder        = $builder;
     }
 
     /**
      * @param GetResponseEvent $event
+     *
+     * @throws \ReflectionException
+     * @throws \Exception
      */
     public function onKernelRequest(GetResponseEvent $event)
     {
         if (HttpKernelInterface::MASTER_REQUEST === $event->getRequestType()) {
             $value = $this->settingsRouter->get('theme');
+
+            /**
+             * Throw exception if no theme set by default.
+             * This can occur only for routes inside the `main` slot.
+             * In that case, exception will not be throw in the admin area.
+             */
+            if (null === $value && $this->builder->hasRoute($event->getRequest()->get('_route'))) {
+                throw new NoActiveThemeException('You must enable a theme to be set has an active theme.');
+            }
 
             if ((null !== $theme = $this->kernel->getThemes()[$value] ?? null) &&
                 $this->translator instanceof DataCollectorTranslator) {
