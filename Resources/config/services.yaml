@@ -18,6 +18,8 @@ services:
 
   liip_theme.theme_request_listener:
     class: Harmony\Bundle\ThemeBundle\EventListener\ThemeRequestListener
+    arguments:
+      $builder: '@rollerworks_route_autowiring.routing_slot.main'
     tags:
       - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest }
   Harmony\Bundle\ThemeBundle\EventListener\ThemeRequestListener: '@liip_theme.theme_request_listener'
