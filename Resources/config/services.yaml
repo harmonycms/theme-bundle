@@ -5,7 +5,6 @@ services:
     autoconfigure: true
     bind:
       string $projectDir: '%kernel.project_dir%'
-      $settingsRouter: '@Helis\SettingsManagerBundle\Settings\SettingsRouter'
       $activeTheme: '@liip_theme.active_theme'
 
   twig.extension.assets:
@@ -27,6 +26,7 @@ services:
     arguments:
       $locator: '@liip_theme.templating_locator'
       $parser: '@templating.filename_parser'
+      $settingsRouter: '@Helis\SettingsManagerBundle\Settings\SettingsRouter'
   Harmony\Bundle\ThemeBundle\Twig\Loader\FilesystemLoader: '@twig.loader.filesystem'
 
   liip_theme.file_locator:

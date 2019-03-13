@@ -3,8 +3,10 @@
 namespace Harmony\Bundle\ThemeBundle\DependencyInjection\Compiler;
 
 use Harmony\Bundle\ThemeBundle\Twig\Loader\FilesystemLoader;
+use Helis\SettingsManagerBundle\Settings\SettingsRouter;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Reference;
 
 /**
  * Class ThemeCompilerPass
@@ -23,5 +25,16 @@ class ThemeCompilerPass implements CompilerPassInterface
     {
         $twigFilesystemLoaderDefinition = $container->findDefinition('twig.loader.filesystem');
         $twigFilesystemLoaderDefinition->setClass(FilesystemLoader::class);
+
+        if (false === $container->has('templating')) {
+            $twigFilesystemLoaderDefinition->replaceArgument(0,
+                $container->getDefinition('liip_theme.templating_locator'));
+            $twigFilesystemLoaderDefinition->replaceArgument(1,
+                $container->getDefinition('templating.filename_parser'));
+            $twigFilesystemLoaderDefinition->setArgument(2, new Reference('kernel'));
+            $twigFilesystemLoaderDefinition->setArgument(3, new Reference(SettingsRouter::class));
+        }
+
+        $twigFilesystemLoaderDefinition->addMethodCall('setActiveTheme', [new Reference('liip_theme.active_theme')]);
     }
 }
