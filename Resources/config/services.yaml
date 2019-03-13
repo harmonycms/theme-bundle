@@ -7,8 +7,6 @@ services:
       string $projectDir: '%kernel.project_dir%'
       $settingsRouter: '@Helis\SettingsManagerBundle\Settings\SettingsRouter'
       $activeTheme: '@liip_theme.active_theme'
-      Symfony\Component\Config\FileLocatorInterface $locator: '@liip_theme.templating_locator'
-      Symfony\Component\Templating\TemplateNameParserInterface $parser: '@templating.filename_parser'
 
   twig.extension.assets:
     class: Harmony\Bundle\ThemeBundle\Twig\AssetsExtension
@@ -26,6 +24,9 @@ services:
 
   twig.loader.filesystem:
     class: Harmony\Bundle\ThemeBundle\Twig\Loader\FilesystemLoader
+    arguments:
+      $locator: '@liip_theme.templating_locator'
+      $parser: '@templating.filename_parser'
   Harmony\Bundle\ThemeBundle\Twig\Loader\FilesystemLoader: '@twig.loader.filesystem'
 
   liip_theme.file_locator:
