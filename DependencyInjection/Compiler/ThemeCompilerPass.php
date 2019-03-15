@@ -3,7 +3,7 @@
 namespace Harmony\Bundle\ThemeBundle\DependencyInjection\Compiler;
 
 use Harmony\Bundle\ThemeBundle\Twig\Loader\FilesystemLoader;
-use Helis\SettingsManagerBundle\Settings\SettingsRouter;
+use Harmony\Bundle\SettingsManagerBundle\Settings\SettingsRouter;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
