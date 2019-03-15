@@ -26,7 +26,7 @@ services:
     arguments:
       $locator: '@liip_theme.templating_locator'
       $parser: '@templating.filename_parser'
-      $settingsRouter: '@Helis\SettingsManagerBundle\Settings\SettingsRouter'
+      $settingsRouter: '@Harmony\Bundle\SettingsManagerBundle\Settings\SettingsRouter'
   Harmony\Bundle\ThemeBundle\Twig\Loader\FilesystemLoader: '@twig.loader.filesystem'
 
   liip_theme.file_locator:
