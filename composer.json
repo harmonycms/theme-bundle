@@ -16,7 +16,6 @@
     "php": "^7.1.3",
     "ext-json": "*",
     "composer/composer": "^1.7",
-    "helis/settings-manager-bundle": "dev-master",
     "jms/serializer-bundle": "^2.4",
     "liip/theme-bundle": "^1.6.1",
     "symfony/asset": "^4.2",
