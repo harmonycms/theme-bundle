@@ -4,8 +4,7 @@ namespace Harmony\Bundle\ThemeBundle\Twig;
 
 use Harmony\Bundle\CoreBundle\Component\HttpKernel\AbstractKernel;
 use Harmony\Bundle\ThemeBundle\HarmonyThemeBundle;
-use Harmony\Sdk\Theme\ThemeInterface;
-use Helis\SettingsManagerBundle\Settings\SettingsRouter;
+use Harmony\Bundle\SettingsManagerBundle\Settings\SettingsRouter;
 use Liip\ThemeBundle\ActiveTheme;
 use Symfony\Bridge\Twig\Extension\AssetExtension as BridgeAssetExtension;
 use Symfony\Component\Asset\Packages;
