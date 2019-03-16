@@ -70,7 +70,7 @@ class ThemeRequestListener
              * This can occur only for routes inside the `main` slot.
              * In that case, exception will not be throw in the admin area.
              */
-            if (null === $value && $this->builder->hasRoute($event->getRequest()->get('_route'))) {
+            if (false === $value && $this->builder->hasRoute($event->getRequest()->get('_route'))) {
                 throw new NoActiveThemeException('You must enable a theme to be set has an active theme.');
             }
 
