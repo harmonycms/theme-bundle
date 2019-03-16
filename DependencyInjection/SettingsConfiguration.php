@@ -17,7 +17,7 @@ class SettingsConfiguration implements ConfigurationInterface
     /**
      * Generates the configuration tree builder.
      *
-     * @see \Helis\SettingsManagerBundle\DependencyInjection\Configuration
+     * @see \Harmony\Bundle\SettingsManagerBundle\DependencyInjection\Configuration
      * @return TreeBuilder The tree builder
      * @throws \ReflectionException
      */
