@@ -62,12 +62,12 @@ class HarmonyThemeExtension extends Extension implements PrependExtensionInterfa
         // get all bundles
         $bundles = $container->getParameter('kernel.bundles');
 
-        if (isset($bundles['HelisSettingsManagerBundle'])) {
+        if (isset($bundles['HarmonySettingsManagerBundle'])) {
             // Generate a config array with the content of `settings_manager.yml` file
             $settings = Yaml::parse(file_get_contents(dirname(__DIR__) . '/Resources/config/settings_manager.yaml'));
 
-            // Prepend the `helis_settings_manager` settings
-            $container->prependExtensionConfig('helis_settings_manager', $settings['helis_settings_manager']);
+            // Prepend the `harmony_settings_manager` settings
+            $container->prependExtensionConfig('harmony_settings_manager', $settings['harmony_settings_manager']);
         }
     }
 }
