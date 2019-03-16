@@ -8,7 +8,6 @@ use Harmony\Sdk\Theme\ThemeInterface;
 use Harmony\Bundle\SettingsManagerBundle\Model\DomainModel;
 use Harmony\Bundle\SettingsManagerBundle\Model\SettingModel;
 use Harmony\Bundle\SettingsManagerBundle\Model\TagModel;
-use Harmony\Bundle\SettingsManagerBundle\Provider\DoctrineOrmSettingsProvider;
 use Harmony\Bundle\SettingsManagerBundle\Provider\Factory\ProviderFactoryInterface;
 use Harmony\Bundle\SettingsManagerBundle\Provider\ReadableSimpleSettingsProvider;
 use Harmony\Bundle\SettingsManagerBundle\Provider\SettingsProviderInterface;
@@ -42,11 +41,11 @@ class ThemeProviderFactory implements ProviderFactoryInterface
     /**
      * ThemeProviderFactory constructor.
      *
-     * @param DenormalizerInterface       $serializer
-     * @param DoctrineOrmSettingsProvider $provider
-     * @param KernelInterface             $kernel
+     * @param DenormalizerInterface     $serializer
+     * @param SettingsProviderInterface $provider
+     * @param KernelInterface           $kernel
      */
-    public function __construct(DenormalizerInterface $serializer, DoctrineOrmSettingsProvider $provider,
+    public function __construct(DenormalizerInterface $serializer, SettingsProviderInterface $provider,
                                 KernelInterface $kernel)
     {
         $this->serializer = $serializer;

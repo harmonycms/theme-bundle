@@ -2,12 +2,15 @@
 
 namespace Harmony\Bundle\ThemeBundle\DependencyInjection;
 
+use Harmony\Bundle\SettingsManagerBundle\Provider\DoctrineOrmSettingsProvider;
+use Harmony\Bundle\ThemeBundle\Provider\ThemeProviderFactory;
 use Harmony\Sdk\Theme\ThemeInterface;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\Extension;
 use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
 use Symfony\Component\DependencyInjection\Loader;
+use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\Yaml\Yaml;
 
 /**
@@ -38,6 +41,16 @@ class HarmonyThemeExtension extends Extension implements PrependExtensionInterfa
             /** @var ThemeInterface $themeClass */
             $themeClass = new $class();
             $twigFilesystemLoaderDefinition->addMethodCall('addPath', [$themeClass->getPath(), $namespace]);
+        }
+
+        // Register $provider for Doctrine ORM, fallback to lazy provider otherwise
+        $themeProviderFactoryDefinition = $container->findDefinition(ThemeProviderFactory::class);
+        if ($container->has(DoctrineOrmSettingsProvider::class)) {
+            $themeProviderFactoryDefinition->setArgument('$provider',
+                new Reference(DoctrineOrmSettingsProvider::class));
+        } else {
+            $themeProviderFactoryDefinition->setArgument('$provider',
+                new Reference('settings_manager.provider.config'));
         }
     }
 
