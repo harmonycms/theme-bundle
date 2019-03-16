@@ -2,7 +2,7 @@
 
 namespace Harmony\Bundle\ThemeBundle\DependencyInjection;
 
-use Helis\SettingsManagerBundle\Model\Type;
+use Harmony\Bundle\SettingsManagerBundle\Model\Type;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 
