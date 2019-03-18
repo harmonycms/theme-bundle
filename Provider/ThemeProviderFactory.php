@@ -5,9 +5,9 @@ namespace Harmony\Bundle\ThemeBundle\Provider;
 use Harmony\Bundle\CoreBundle\Component\HttpKernel\AbstractKernel;
 use Harmony\Bundle\ThemeBundle\DependencyInjection\SettingsConfiguration;
 use Harmony\Sdk\Theme\ThemeInterface;
-use Harmony\Bundle\SettingsManagerBundle\Model\DomainModel;
-use Harmony\Bundle\SettingsManagerBundle\Model\SettingModel;
-use Harmony\Bundle\SettingsManagerBundle\Model\TagModel;
+use Harmony\Bundle\SettingsManagerBundle\Model\SettingDomain;
+use Harmony\Bundle\SettingsManagerBundle\Model\Setting;
+use Harmony\Bundle\SettingsManagerBundle\Model\SettingTag;
 use Harmony\Bundle\SettingsManagerBundle\Provider\Factory\ProviderFactoryInterface;
 use Harmony\Bundle\SettingsManagerBundle\Provider\ReadableSimpleSettingsProvider;
 use Harmony\Bundle\SettingsManagerBundle\Provider\SettingsProviderInterface;
@@ -35,7 +35,7 @@ class ThemeProviderFactory implements ProviderFactoryInterface
     /** @var KernelInterface|AbstractKernel $kernel */
     protected $kernel;
 
-    /** @var null|SettingModel $theme */
+    /** @var null|Setting $theme */
     protected $theme;
 
     /**
@@ -75,8 +75,8 @@ class ThemeProviderFactory implements ProviderFactoryInterface
                 $data          = $this->processConfiguration($configuration, Yaml::parseFile($settingPath));
             }
         }
-        /** @var SettingModel[] $settings */
-        $settings = $this->serializer->denormalize($data, SettingModel::class . '[]');
+        /** @var Setting[] $settings */
+        $settings = $this->serializer->denormalize($data, Setting::class . '[]');
         if (!empty($settings)) {
             $this->_updateSettingsForTheme($settings, $theme);
         }
@@ -110,10 +110,10 @@ class ThemeProviderFactory implements ProviderFactoryInterface
      */
     private function _updateSettingsForTheme(array &$settings, ?ThemeInterface $theme): void
     {
-        $themeDomain = (new DomainModel())->setName('theme')->setEnabled(true)->setReadOnly(true);
-        $themeIdTag  = (new TagModel())->setName($theme->getIdentifier());
+        $themeDomain = (new SettingDomain())->setName('theme')->setEnabled(true)->setReadOnly(true);
+        $themeIdTag  = (new SettingTag())->setName($theme->getIdentifier());
 
-        /** @var SettingModel $setting */
+        /** @var Setting $setting */
         foreach ($settings as $setting) {
             // Set default domain to `theme`
             $setting->setDomain($themeDomain);
