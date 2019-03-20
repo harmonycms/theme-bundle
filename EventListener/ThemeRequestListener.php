@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Harmony\Bundle\ThemeBundle\EventListener;
 
 use Harmony\Bundle\CoreBundle\Component\HttpKernel\AbstractKernel;
@@ -13,6 +15,8 @@ use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Translation\DataCollectorTranslator;
 use Symfony\Component\Translation\Translator;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use function explode;
+use function is_dir;
 
 /**
  * Class ThemeRequestListener
@@ -63,14 +67,14 @@ class ThemeRequestListener
     public function onKernelRequest(GetResponseEvent $event)
     {
         if (HttpKernelInterface::MASTER_REQUEST === $event->getRequestType()) {
-            $value = $this->settingsRouter->get('theme');
+            $value = $this->settingsRouter->get('theme', null);
 
             /**
              * Throw exception if no theme set by default.
              * This can occur only for routes inside the `main` slot.
              * In that case, exception will not be throw in the admin area.
              */
-            if (false === $value && $this->builder->hasRoute($event->getRequest()->get('_route'))) {
+            if (null === $value && $this->builder->hasRoute($event->getRequest()->get('_route'))) {
                 throw new NoActiveThemeException('You must enable a theme to be set has an active theme.');
             }
 
@@ -80,11 +84,11 @@ class ThemeRequestListener
                 $finder = (new Finder())->files();
                 // Parent need to be loaded first
                 if (null !== $theme->getParent() &&
-                    \is_dir($parentTransPath = $theme->getParent()->getPath() . '/translations')) {
+                    is_dir($parentTransPath = $theme->getParent()->getPath() . '/translations')) {
                     $finder->in($parentTransPath);
                 }
                 // Child (current) theme, will override translations
-                if (\is_dir($transPath = $theme->getPath() . '/translations')) {
+                if (is_dir($transPath = $theme->getPath() . '/translations')) {
                     $finder->in($transPath);
                 }
 
