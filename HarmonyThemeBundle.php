@@ -3,6 +3,7 @@
 namespace Harmony\Bundle\ThemeBundle;
 
 use Harmony\Bundle\ThemeBundle\DependencyInjection\Compiler\ThemeCompilerPass;
+use Harmony\Bundle\ThemeBundle\DependencyInjection\Compiler\ThemeProviderPass;
 use Symfony\Component\DependencyInjection\Compiler\PassConfig;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
@@ -27,6 +28,7 @@ class HarmonyThemeBundle extends Bundle
     public function build(ContainerBuilder $container)
     {
         $container->addCompilerPass(new ThemeCompilerPass(), PassConfig::TYPE_BEFORE_OPTIMIZATION, - 10);
+        $container->addCompilerPass(new ThemeProviderPass());
     }
 
 }

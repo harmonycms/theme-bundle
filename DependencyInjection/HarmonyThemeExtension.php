@@ -2,16 +2,18 @@
 
 namespace Harmony\Bundle\ThemeBundle\DependencyInjection;
 
-use Harmony\Bundle\SettingsManagerBundle\Provider\DoctrineOrmSettingsProvider;
-use Harmony\Bundle\ThemeBundle\Provider\ThemeProviderFactory;
+use Exception;
 use Harmony\Sdk\Theme\ThemeInterface;
+use InvalidArgumentException;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\Extension;
 use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
 use Symfony\Component\DependencyInjection\Loader;
-use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\Yaml\Yaml;
+use function array_keys;
+use function dirname;
+use function file_get_contents;
 
 /**
  * Class HarmonyThemeExtension
@@ -27,8 +29,8 @@ class HarmonyThemeExtension extends Extension implements PrependExtensionInterfa
      * @param array            $configs   An array of configuration values
      * @param ContainerBuilder $container A ContainerBuilder instance
      *
-     * @throws \InvalidArgumentException When provided tag is not defined in this extension
-     * @throws \Exception
+     * @throws InvalidArgumentException When provided tag is not defined in this extension
+     * @throws Exception
      */
     public function load(array $configs, ContainerBuilder $container)
     {
@@ -42,16 +44,6 @@ class HarmonyThemeExtension extends Extension implements PrependExtensionInterfa
             $themeClass = new $class();
             $twigFilesystemLoaderDefinition->addMethodCall('addPath', [$themeClass->getPath(), $namespace]);
         }
-
-        // Register $provider for Doctrine ORM, fallback to lazy provider otherwise
-        $themeProviderFactoryDefinition = $container->findDefinition(ThemeProviderFactory::class);
-        if ($container->has(DoctrineOrmSettingsProvider::class)) {
-            $themeProviderFactoryDefinition->setArgument('$provider',
-                new Reference(DoctrineOrmSettingsProvider::class));
-        } else {
-            $themeProviderFactoryDefinition->setArgument('$provider',
-                new Reference('settings_manager.provider.config'));
-        }
     }
 
     /**
@@ -59,7 +51,7 @@ class HarmonyThemeExtension extends Extension implements PrependExtensionInterfa
      *
      * @param ContainerBuilder $container
      *
-     * @throws \Exception
+     * @throws Exception
      */
     public function prepend(ContainerBuilder $container)
     {
