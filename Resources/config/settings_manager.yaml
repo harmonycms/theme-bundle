@@ -1,5 +1,5 @@
 harmony_settings_manager:
-  settings:
-    - name: theme
-      type: choice
-      tags: ['theme']
+    settings:
+        -   name: theme
+            type: choice
+            tags: ['theme']

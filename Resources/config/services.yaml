@@ -1,42 +1,42 @@
 services:
-  _defaults:
-    public: false
-    autowire: true
-    autoconfigure: true
-    bind:
-      string $projectDir: '%kernel.project_dir%'
-      $activeTheme: '@liip_theme.active_theme'
+    _defaults:
+        public: false
+        autowire: true
+        autoconfigure: true
+        bind:
+            string $projectDir: '%kernel.project_dir%'
+            $activeTheme: '@liip_theme.active_theme'
 
-  twig.extension.assets:
-    class: Harmony\Bundle\ThemeBundle\Twig\AssetsExtension
-  Harmony\Bundle\ThemeBundle\Twig\AssetsExtension: '@twig.extension.assets'
+    twig.extension.assets:
+        class: Harmony\Bundle\ThemeBundle\Twig\AssetsExtension
+    Harmony\Bundle\ThemeBundle\Twig\AssetsExtension: '@twig.extension.assets'
 
-  Harmony\Bundle\ThemeBundle\Command\ThemeAssetsInstallCommand: ~
+    Harmony\Bundle\ThemeBundle\Command\ThemeAssetsInstallCommand: ~
 
-  liip_theme.theme_request_listener:
-    class: Harmony\Bundle\ThemeBundle\EventListener\ThemeRequestListener
-    arguments:
-      $builder: '@rollerworks_route_autowiring.routing_slot.main'
-    tags:
-      - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest }
-  Harmony\Bundle\ThemeBundle\EventListener\ThemeRequestListener: '@liip_theme.theme_request_listener'
+    liip_theme.theme_request_listener:
+        class: Harmony\Bundle\ThemeBundle\EventListener\ThemeRequestListener
+        arguments:
+            $builder: '@rollerworks_route_autowiring.routing_slot.main'
+        tags:
+            - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest }
+    Harmony\Bundle\ThemeBundle\EventListener\ThemeRequestListener: '@liip_theme.theme_request_listener'
 
-  twig.loader.filesystem:
-    class: Harmony\Bundle\ThemeBundle\Twig\Loader\FilesystemLoader
-    arguments:
-      $locator: '@liip_theme.templating_locator'
-      $parser: '@templating.filename_parser'
-      $settingsRouter: '@Harmony\Bundle\SettingsManagerBundle\Settings\SettingsRouter'
-  Harmony\Bundle\ThemeBundle\Twig\Loader\FilesystemLoader: '@twig.loader.filesystem'
+    twig.loader.filesystem:
+        class: Harmony\Bundle\ThemeBundle\Twig\Loader\FilesystemLoader
+        arguments:
+            $locator: '@liip_theme.templating_locator'
+            $parser: '@templating.filename_parser'
+            $settingsRouter: '@Harmony\Bundle\SettingsManagerBundle\Settings\SettingsRouter'
+    Harmony\Bundle\ThemeBundle\Twig\Loader\FilesystemLoader: '@twig.loader.filesystem'
 
-  liip_theme.file_locator:
-    class: Harmony\Bundle\ThemeBundle\Locator\FileLocator
-    arguments:
-      $pathPatterns: '%liip_theme.path_patterns%'
-  Harmony\Bundle\ThemeBundle\Locator\FileLocator: '@liip_theme.file_locator'
+    liip_theme.file_locator:
+        class: Harmony\Bundle\ThemeBundle\Locator\FileLocator
+        arguments:
+            $pathPatterns: '%liip_theme.path_patterns%'
+    Harmony\Bundle\ThemeBundle\Locator\FileLocator: '@liip_theme.file_locator'
 
-  Harmony\Bundle\ThemeBundle\Provider\ThemeProviderFactory:
-    arguments:
-      $serializer: '@settings_manager.serializer'
-    tags:
-      - { name: settings_manager.provider_factory, provider: theme, priority: 5 }
+    Harmony\Bundle\ThemeBundle\Provider\ThemeProviderFactory:
+        arguments:
+            $serializer: '@settings_manager.serializer'
+        tags:
+            - { name: settings_manager.provider_factory, provider: theme, priority: 5 }
