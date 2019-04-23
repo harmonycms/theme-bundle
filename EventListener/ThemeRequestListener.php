@@ -4,10 +4,14 @@ declare(strict_types=1);
 
 namespace Harmony\Bundle\ThemeBundle\EventListener;
 
+use Exception;
 use Harmony\Bundle\CoreBundle\Component\HttpKernel\AbstractKernel;
 use Harmony\Bundle\CoreBundle\Component\Routing\RouteCollectionBuilder;
-use Harmony\Bundle\ThemeBundle\Exception\NoActiveThemeException;
 use Harmony\Bundle\SettingsManagerBundle\Settings\SettingsRouter;
+use Harmony\Bundle\ThemeBundle\Exception\NoActiveThemeException;
+use LogicException;
+use ReflectionException;
+use SplFileInfo;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
@@ -61,8 +65,8 @@ class ThemeRequestListener
     /**
      * @param GetResponseEvent $event
      *
-     * @throws \ReflectionException
-     * @throws \Exception
+     * @throws ReflectionException
+     * @throws Exception
      */
     public function onKernelRequest(GetResponseEvent $event)
     {
@@ -93,14 +97,15 @@ class ThemeRequestListener
                 }
 
                 try {
-                    /** @var \SplFileInfo $file */
+                    /** @var SplFileInfo $file */
                     foreach ($finder as $file) {
-                        list($domain, $locale) = explode('.', $file->getBasename(), 3);
+                        [$domain, $locale] = explode('.', $file->getBasename(), 3);
                         switch ($file->getExtension()) {
                             case 'php':
                                 $this->translator->addResource('php', (string)$file, $locale, $domain);
                                 break;
                             case 'xlf':
+                            case 'xliff':
                                 $this->translator->addResource('xlf', (string)$file, $locale, $domain);
                                 break;
                             case 'yaml':
@@ -109,7 +114,7 @@ class ThemeRequestListener
                         }
                     }
                 }
-                catch (\LogicException $e) {
+                catch (LogicException $e) {
                 }
             }
         }
