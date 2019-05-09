@@ -6,7 +6,7 @@ namespace Harmony\Bundle\ThemeBundle\EventListener;
 
 use Exception;
 use Harmony\Bundle\CoreBundle\Component\HttpKernel\AbstractKernel;
-use Harmony\Bundle\CoreBundle\Component\Routing\RouteCollectionBuilder;
+use Harmony\Bundle\RoutingBundle\Component\Routing\RouteCollectionBuilder;
 use Harmony\Bundle\SettingsManagerBundle\Settings\SettingsRouter;
 use Harmony\Bundle\ThemeBundle\Exception\NoActiveThemeException;
 use LogicException;
