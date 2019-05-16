@@ -3,6 +3,7 @@
 namespace Harmony\Bundle\ThemeBundle;
 
 use Harmony\Bundle\ThemeBundle\DependencyInjection\Compiler\ThemeCompilerPass;
+use Harmony\Bundle\ThemeBundle\DependencyInjection\HarmonyThemeExtension;
 use Symfony\Component\DependencyInjection\Compiler\PassConfig;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
@@ -29,4 +30,13 @@ class HarmonyThemeBundle extends Bundle
         $container->addCompilerPass(new ThemeCompilerPass(), PassConfig::TYPE_BEFORE_OPTIMIZATION, - 10);
     }
 
+    /**
+     * Returns the container extension that should be implicitly loaded.
+     *
+     * @return HarmonyThemeExtension The default extension or null if there is none
+     */
+    public function getContainerExtension()
+    {
+        return new HarmonyThemeExtension();
+    }
 }

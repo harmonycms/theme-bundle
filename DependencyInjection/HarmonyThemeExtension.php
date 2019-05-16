@@ -3,6 +3,7 @@
 namespace Harmony\Bundle\ThemeBundle\DependencyInjection;
 
 use Exception;
+use Harmony\Bundle\CoreBundle\DependencyInjection\HarmonyCoreExtension;
 use Harmony\Sdk\Theme\ThemeInterface;
 use InvalidArgumentException;
 use Symfony\Component\Config\FileLocator;
@@ -65,5 +66,15 @@ class HarmonyThemeExtension extends Extension implements PrependExtensionInterfa
 
         // Prepend the `liip_theme` settings
         $container->prependExtensionConfig('liip_theme', $liipThemeConfig['liip_theme']);
+    }
+
+    /**
+     * Return HarmonyCMS alias name.
+     *
+     * @return string
+     */
+    public function getAlias(): string
+    {
+        return HarmonyCoreExtension::ALIAS;
     }
 }
