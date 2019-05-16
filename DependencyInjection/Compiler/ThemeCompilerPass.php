@@ -31,6 +31,7 @@ class ThemeCompilerPass implements CompilerPassInterface
             $twigFilesystemLoaderDefinition->replaceArgument(1,
                 $container->getDefinition('templating.filename_parser'));
             $twigFilesystemLoaderDefinition->setArgument(2, new Reference('kernel'));
+            $twigFilesystemLoaderDefinition->setArgument(3, $container->getParameter('harmony.theme_default'));
         }
 
         $twigFilesystemLoaderDefinition->addMethodCall('setActiveTheme', [new Reference('liip_theme.active_theme')]);
