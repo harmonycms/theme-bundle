@@ -34,6 +34,8 @@ class HarmonyThemeExtension extends Extension implements PrependExtensionInterfa
      */
     public function load(array $configs, ContainerBuilder $container)
     {
+        $this->processConfiguration(new Configuration(), $configs);
+
         $loader = new Loader\YamlFileLoader($container, new FileLocator(dirname(__DIR__) . '/Resources/config'));
         $loader->load('services.yaml');
 
@@ -63,16 +65,5 @@ class HarmonyThemeExtension extends Extension implements PrependExtensionInterfa
 
         // Prepend the `liip_theme` settings
         $container->prependExtensionConfig('liip_theme', $liipThemeConfig['liip_theme']);
-
-        // get all bundles
-        $bundles = $container->getParameter('kernel.bundles');
-
-        if (isset($bundles['HarmonySettingsManagerBundle'])) {
-            // Generate a config array with the content of `settings_manager.yml` file
-            $settings = Yaml::parse(file_get_contents(dirname(__DIR__) . '/Resources/config/settings_manager.yaml'));
-
-            // Prepend the `harmony_settings_manager` settings
-            $container->prependExtensionConfig('harmony_settings_manager', $settings['harmony_settings_manager']);
-        }
     }
 }

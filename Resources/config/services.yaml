@@ -26,7 +26,7 @@ services:
         arguments:
             $locator: '@liip_theme.templating_locator'
             $parser: '@templating.filename_parser'
-            $settingsRouter: '@Harmony\Bundle\SettingsManagerBundle\Settings\SettingsRouter'
+            $defaultTheme: '%harmony.theme_default%'
     Harmony\Bundle\ThemeBundle\Twig\Loader\FilesystemLoader: '@twig.loader.filesystem'
 
     liip_theme.file_locator:
@@ -34,9 +34,3 @@ services:
         arguments:
             $pathPatterns: '%liip_theme.path_patterns%'
     Harmony\Bundle\ThemeBundle\Locator\FileLocator: '@liip_theme.file_locator'
-
-    Harmony\Bundle\ThemeBundle\Provider\ThemeProviderFactory:
-        arguments:
-            $serializer: '@settings_manager.serializer'
-        tags:
-            - { name: settings_manager.provider_factory, provider: theme, priority: 5 }
