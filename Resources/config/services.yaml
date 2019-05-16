@@ -4,11 +4,12 @@ services:
         autowire: true
         autoconfigure: true
         bind:
-            string $projectDir: '%kernel.project_dir%'
             $activeTheme: '@liip_theme.active_theme'
 
     twig.extension.assets:
         class: Harmony\Bundle\ThemeBundle\Twig\AssetsExtension
+        arguments:
+            $projectDir: '%kernel.project_dir%'
     Harmony\Bundle\ThemeBundle\Twig\AssetsExtension: '@twig.extension.assets'
 
     Harmony\Bundle\ThemeBundle\Command\ThemeAssetsInstallCommand: ~
