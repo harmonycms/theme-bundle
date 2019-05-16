@@ -3,7 +3,6 @@
 namespace Harmony\Bundle\ThemeBundle\Twig\Loader;
 
 use Harmony\Bundle\CoreBundle\Component\HttpKernel\AbstractKernel;
-use Harmony\Bundle\SettingsManagerBundle\Settings\SettingsRouter;
 use Liip\ThemeBundle\Twig\Loader\FilesystemLoader as BaseFilesystemLoader;
 use Symfony\Component\Config\FileLocatorInterface;
 use Symfony\Component\HttpKernel\KernelInterface;
@@ -21,26 +20,26 @@ class FilesystemLoader extends BaseFilesystemLoader
     /** @var KernelInterface $kernel */
     protected $kernel;
 
-    /** @var SettingsRouter $settingsRouter */
-    protected $settingsRouter;
+    /** @var string|null $defaultTheme */
+    protected $defaultTheme;
 
     /**
      * Constructor.
      *
-     * @see TwigBundle own FilesystemLoader
-     *
      * @param FileLocatorInterface           $locator  A FileLocatorInterface instance
      * @param TemplateNameParserInterface    $parser   A TemplateNameParserInterface instance
      * @param KernelInterface|AbstractKernel $kernel
-     * @param SettingsRouter                 $settingsRouter
+     * @param string|null                    $defaultTheme
      * @param string|null                    $rootPath The root path common to all relative paths (null for getcwd())
+     *
+     * @see TwigBundle own FilesystemLoader
      */
     public function __construct(FileLocatorInterface $locator, TemplateNameParserInterface $parser,
-                                KernelInterface $kernel, SettingsRouter $settingsRouter, ?string $rootPath = null)
+                                KernelInterface $kernel, string $defaultTheme = null, ?string $rootPath = null)
     {
         parent::__construct($locator, $parser, $rootPath);
-        $this->kernel         = $kernel;
-        $this->settingsRouter = $settingsRouter;
+        $this->kernel       = $kernel;
+        $this->defaultTheme = $defaultTheme;
     }
 
     /**
@@ -62,8 +61,8 @@ class FilesystemLoader extends BaseFilesystemLoader
         $this->activeTheme->setThemes(array_keys($this->kernel->getThemes()));
 
         // Set active theme from database/settings
-        if ($name = $this->settingsRouter->get('theme')) {
-            $this->activeTheme->setName($name);
+        if ($this->defaultTheme) {
+            $this->activeTheme->setName($this->defaultTheme);
         }
 
         return parent::findTemplate($template, $throw);

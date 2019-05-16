@@ -7,7 +7,6 @@ namespace Harmony\Bundle\ThemeBundle\EventListener;
 use Exception;
 use Harmony\Bundle\CoreBundle\Component\HttpKernel\AbstractKernel;
 use Harmony\Bundle\RoutingBundle\Component\Routing\RouteCollectionBuilder;
-use Harmony\Bundle\SettingsManagerBundle\Settings\SettingsRouter;
 use Harmony\Bundle\ThemeBundle\Exception\NoActiveThemeException;
 use LogicException;
 use ReflectionException;
@@ -35,9 +34,6 @@ class ThemeRequestListener
      */
     protected $newTheme;
 
-    /** @var SettingsRouter $settingsRouter */
-    protected $settingsRouter;
-
     /** @var KernelInterface $kernel */
     protected $kernel;
 
@@ -47,19 +43,22 @@ class ThemeRequestListener
     /** @var RouteCollectionBuilder $builder */
     protected $builder;
 
+    /** @var string|null $defaultTheme */
+    protected $defaultTheme;
+
     /**
      * @param KernelInterface|AbstractKernel              $kernel
-     * @param SettingsRouter                              $settingsRouter
      * @param TranslatorInterface|DataCollectorTranslator $translator
      * @param RouteCollectionBuilder                      $builder
+     * @param string|null                                 $defaultTheme
      */
-    public function __construct(KernelInterface $kernel, SettingsRouter $settingsRouter,
-                                TranslatorInterface $translator, RouteCollectionBuilder $builder)
+    public function __construct(KernelInterface $kernel, TranslatorInterface $translator,
+                                RouteCollectionBuilder $builder, string $defaultTheme = null)
     {
-        $this->kernel         = $kernel;
-        $this->settingsRouter = $settingsRouter;
-        $this->translator     = $translator;
-        $this->builder        = $builder;
+        $this->kernel       = $kernel;
+        $this->translator   = $translator;
+        $this->builder      = $builder;
+        $this->defaultTheme = $defaultTheme;
     }
 
     /**
@@ -71,18 +70,16 @@ class ThemeRequestListener
     public function onKernelRequest(GetResponseEvent $event)
     {
         if (HttpKernelInterface::MASTER_REQUEST === $event->getRequestType()) {
-            $value = $this->settingsRouter->get('theme', null);
-
             /**
              * Throw exception if no theme set by default.
              * This can occur only for routes inside the `main` slot.
              * In that case, exception will not be throw in the admin area.
              */
-            if (null === $value && $this->builder->hasRoute($event->getRequest()->get('_route'))) {
+            if (null === $this->defaultTheme && $this->builder->hasRoute($event->getRequest()->get('_route'))) {
                 throw new NoActiveThemeException('You must enable a theme to be set has an active theme.');
             }
 
-            if ((null !== $theme = $this->kernel->getThemes()[$value] ?? null) &&
+            if ((null !== $theme = $this->kernel->getThemes()[$this->defaultTheme] ?? null) &&
                 $this->translator instanceof DataCollectorTranslator) {
 
                 $finder = (new Finder())->files();

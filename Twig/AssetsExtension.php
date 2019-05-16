@@ -4,7 +4,6 @@ namespace Harmony\Bundle\ThemeBundle\Twig;
 
 use Harmony\Bundle\CoreBundle\Component\HttpKernel\AbstractKernel;
 use Harmony\Bundle\ThemeBundle\HarmonyThemeBundle;
-use Harmony\Bundle\SettingsManagerBundle\Settings\SettingsRouter;
 use Liip\ThemeBundle\ActiveTheme;
 use Symfony\Bridge\Twig\Extension\AssetExtension as BridgeAssetExtension;
 use Symfony\Component\Asset\Packages;
@@ -30,26 +29,21 @@ class AssetsExtension extends BridgeAssetExtension implements GlobalsInterface
     /** @var KernelInterface|AbstractKernel $kernel */
     protected $kernel;
 
-    /** @var SettingsRouter $settingsRouter */
-    protected $settingsRouter;
-
     /**
      * AssetsExtension constructor.
      *
      * @param KernelInterface $kernel
      * @param Packages        $packages
      * @param ActiveTheme     $activeTheme
-     * @param SettingsRouter  $settingsRouter
      * @param string          $projectDir
      */
     public function __construct(KernelInterface $kernel, Packages $packages, ActiveTheme $activeTheme,
-                                SettingsRouter $settingsRouter, string $projectDir)
+                                string $projectDir)
     {
         parent::__construct($packages);
-        $this->kernel         = $kernel;
-        $this->activeTheme    = $activeTheme;
-        $this->projectDir     = $projectDir;
-        $this->settingsRouter = $settingsRouter;
+        $this->kernel      = $kernel;
+        $this->activeTheme = $activeTheme;
+        $this->projectDir  = $projectDir;
     }
 
     /**
@@ -85,7 +79,7 @@ class AssetsExtension extends BridgeAssetExtension implements GlobalsInterface
     {
         return [
             'harmony' => [
-                'site_name' => $this->settingsRouter->get('site_name')
+                'site_name' => 'site_name'
             ]
         ];
     }
