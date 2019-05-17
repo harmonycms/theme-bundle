@@ -12,6 +12,9 @@ services:
             $projectDir: '%kernel.project_dir%'
     Harmony\Bundle\ThemeBundle\Twig\AssetsExtension: '@twig.extension.assets'
 
+    Harmony\Bundle\ThemeBundle\Twig\Extension:
+        tags: ['twig.extension']
+
     Harmony\Bundle\ThemeBundle\Command\ThemeAssetsInstallCommand: ~
 
     liip_theme.theme_request_listener:

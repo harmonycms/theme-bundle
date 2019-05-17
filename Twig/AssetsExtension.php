@@ -8,16 +8,17 @@ use Liip\ThemeBundle\ActiveTheme;
 use Symfony\Bridge\Twig\Extension\AssetExtension as BridgeAssetExtension;
 use Symfony\Component\Asset\Packages;
 use Symfony\Component\HttpKernel\KernelInterface;
-use Twig\Extension\GlobalsInterface;
 use Twig\TwigFilter;
 use Twig\TwigFunction;
+use function array_merge;
+use function sprintf;
 
 /**
  * Class AssetsExtension
  *
  * @package Harmony\Bundle\ThemeBundle\Twig
  */
-class AssetsExtension extends BridgeAssetExtension implements GlobalsInterface
+class AssetsExtension extends BridgeAssetExtension
 {
 
     /** @var ActiveTheme $activeTheme */
@@ -68,20 +69,6 @@ class AssetsExtension extends BridgeAssetExtension implements GlobalsInterface
         return array_merge(parent::getFilters(), [
             new TwigFilter('theme', [$this, 'getThemeUrl'])
         ]);
-    }
-
-    /**
-     * Returns a list of global variables to add to the existing list.
-     *
-     * @return array An array of global variables
-     */
-    public function getGlobals(): array
-    {
-        return [
-            'harmony' => [
-                'site_name' => 'site_name'
-            ]
-        ];
     }
 
     /**
