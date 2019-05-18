@@ -37,12 +37,23 @@ class HarmonyThemeExtension extends Extension implements PrependExtensionInterfa
         $loader = new Loader\YamlFileLoader($container, new FileLocator(dirname(__DIR__) . '/Resources/config'));
         $loader->load('services.yaml');
 
+        $theme                          = null;
+        $defaultTheme                   = $container->getParameter('harmony.theme_default');
         $twigFilesystemLoaderDefinition = $container->getDefinition('twig.loader.filesystem');
         // register themes as Twig namespaces
         foreach ($container->getParameter('kernel.themes') as $namespace => $class) {
             /** @var ThemeInterface $themeClass */
             $themeClass = new $class();
             $twigFilesystemLoaderDefinition->addMethodCall('addPath', [$themeClass->getPath(), $namespace]);
+
+            if (null !== $defaultTheme && $namespace === $defaultTheme) {
+                $theme = $themeClass;
+            }
+        }
+
+        if (null !== $theme && $theme->hasSettings()) {
+            $themeSettings = Yaml::parse(file_get_contents($theme->getSettingPath()));
+            $container->prependExtensionConfig('harmony', ['theme_settings' => $themeSettings]);
         }
     }
 
